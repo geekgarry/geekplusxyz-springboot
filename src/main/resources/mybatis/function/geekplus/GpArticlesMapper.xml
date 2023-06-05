@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maike.webapp.function.mapper.GpArticlesMapper">
+
+    <resultMap type="GpArticles" id="GpArticlesResult">
+        <result property="id"    column="id"    />
+        <result property="authorName"    column="author_name"    />
+        <result property="authorId"    column="author_id"    />
+        <result property="articleTitle"    column="article_title"    />
+        <result property="articleContent"    column="article_content"    />
+        <result property="articleCategory"    column="article_category"    />
+        <result property="likeCount"    column="like_count"    />
+        <result property="viewCount"    column="view_count"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="isDisplay"    column="is_display"    />
+        <collection property="tags" column="{articleId=id}" select="selectTagByArticleId"
+         javaType="java.util.ArrayList" ofType="GpArticleTags">
+        </collection>
+    </resultMap>
+
+    <resultMap type="GpArticles" id="GpArticlesNextPrevResult">
+        <result property="id"    column="id"    />
+        <result property="authorName"    column="author_name"    />
+        <result property="authorId"    column="author_id"    />
+        <result property="articleTitle"    column="article_title"    />
+    </resultMap>
+
+    <resultMap type="GpArticleTags" id="GpArticleTagsResult">
+        <result property="id"    column="id"    />
+        <result property="tagName"    column="tag_name"    />
+        <result property="tagInfo"    column="tag_info"    />
+        <result property="articleCount" column="article_count" />
+    </resultMap>
+
+    <!-- 留言查询映射结果 -->
+<!--    <resultMap id="GpArticlesResultMap" type="java.util.Map">-->
+<!--        <result column="id" property="id" />-->
+<!--        <result column="nickName" property="nickName" />-->
+<!--        <result column="email" property="email" />-->
+<!--        <result column="website" property="website" />-->
+<!--        <result column="content" property="content" />-->
+<!--        <result column="createTime" property="createTime" />-->
+<!--        <result column="lwType" property="lwType" />-->
+<!--        <result column="toUserId" property="toUserId" />-->
+<!--        <result column="toNickName" property="toNickName" />-->
+<!--        <result column="userId" property="userId" />-->
+<!--    </resultMap>-->
+
+    <sql id="selectGpArticlesVo">
+        select id, author_name, author_id, article_title, article_content, article_category, like_count, view_count, create_time, update_time, is_display from gp_articles
+    </sql>
+
+    <sql id="selectGpArticlesForTagVo">
+        select id, author_name, author_id, article_title, article_content, article_category, like_count, view_count, create_time, update_time, is_display from gp_articles
+    </sql>
+
+    <sql id="selectGpArticleForCategoryList">
+        select ga.id, ga.author_name, ga.author_id, ga.article_title, ga.article_content, ga.article_category, gac.path, ga.like_count, ga.view_count, ga.create_time,
+         ga.update_time,ga.is_display from gp_articles ga left join gp_article_category gac on ga.article_category=gac.id
+    </sql>
+
+<!--    固定查询不同目录的前10条文章-->
+    <select id="selectGpArticlesListByCategoryLimitTen" parameterType="GpArticles" resultMap="GpArticlesResult">
+        <include refid="selectGpArticleForCategoryList"/>
+        <where>
+            <if test="authorName != null  and authorName != ''"> and ga.author_name like concat('%', #{authorName}, '%')</if>
+            <if test="authorId != null "> and ga.author_id = #{authorId}</if>
+            <if test="articleTitle != null  and articleTitle != ''"> and ga.article_title = #{articleTitle}</if>
+            <if test="articleContent != null  and articleContent != ''"> and ga.article_content = #{articleContent}</if>
+            <if test="articleCategory != null  and articleCategory != ''"> and ga.article_category = #{articleCategory}</if>
+            <if test="likeCount != null "> and ga.like_count = #{likeCount}</if>
+            <if test="viewCount != null "> and ga.view_count = #{viewCount}</if>
+            <if test="viewCount != null "> and ga.view_count = #{viewCount}</if>
+            <if test="pathName != null "> and gac.pathName = #{pathName}</if>
+            and ga.is_display = 1
+        </where>
+        order by create_time desc,like_count desc,view_count desc limit 10
+    </select>
+
+<!--    根据目录ID查询前几条最新的文章-->
+    <select id="selectGpArticlesListByCategoryLimit" resultMap="GpArticlesResult">
+        select ga.id, ga.author_name, ga.author_id, ga.article_title, ga.article_content, ga.article_category, gac.path, ga.like_count, ga.view_count, ga.create_time,
+         ga.update_time,ga.is_display from gp_articles ga left join gp_article_category gac on ga.article_category=gac.id
+         where ga.is_display=1 and gac.path=#{pathName} order by ga.create_time desc,ga.like_count desc,ga.view_count desc limit ${limitCount}
+    </select>
+
+    <!--    根据目录ID动态查询分页的文章-->
+    <select id="selectGpArticlesListByCategory" parameterType="String" resultMap="GpArticlesResult">
+        select ga.id, ga.author_name, ga.author_id, ga.article_title, ga.article_content, ga.article_category, gac.path, ga.like_count, ga.view_count, ga.create_time,
+         ga.update_time,ga.is_display from gp_articles ga left join gp_article_category gac on ga.article_category=gac.id
+        <where>
+            and ga.is_display=1
+            <if test="_parameter !=null and _parameter!= ''">and gac.path=#{pathName}</if>
+        </where>
+          order by ga.create_time desc,ga.like_count desc,ga.view_count desc
+    </select>
+
+    <!--    根据搜索标题动态查询分页的文章-->
+    <select id="selectGpArticlesListByKeyWords" parameterType="String" resultMap="GpArticlesResult">
+        select ga.id, ga.author_name, ga.author_id, ga.article_title, ga.article_content, ga.article_category, gac.path, ga.like_count, ga.view_count, ga.create_time,
+        ga.update_time,ga.is_display from gp_articles ga left join gp_article_category gac on ga.article_category=gac.id
+        <where>
+            and ga.is_display=1
+            <if test="_parameter !=null and _parameter!= ''">and ga.article_title like concat('%', #{articleTitle}, '%')</if>
+        </where>
+        order by ga.create_time desc,ga.like_count desc,ga.view_count desc
+    </select>
+
+    <!--    根据文章标签动态查询分页的文章（还没写）-->
+    <select id="selectGpArticlesListByTag" parameterType="String" resultMap="GpArticlesResult">
+        select ga.id, ga.author_name, ga.author_id, ga.article_title, ga.article_content, ga.article_category, gac.path, ga.like_count, ga.view_count, ga.create_time,
+        ga.update_time,ga.is_display from gp_articles ga left join gp_article_category gac on ga.article_category=gac.id
+        <where>
+            and ga.is_display=1
+            <if test="_parameter !=null and _parameter!= ''">and gac.article_title like concat('%', #{articleTitle}, '%')</if>
+        </where>
+        order by ga.create_time desc,ga.like_count desc,ga.view_count desc
+    </select>
+
+    <!--    根据目录ID查询首页大屏的一篇文章-->
+    <select id="selectOneArticleByCategory" resultMap="GpArticlesResult">
+        select ga.id, ga.author_name, ga.author_id, ga.article_title, ga.article_content, ga.article_category, gac.path, ga.like_count, ga.view_count, ga.create_time,
+         ga.update_time,ga.is_display from gp_articles ga left join gp_article_category gac on ga.article_category=gac.id
+        <where>
+            and ga.is_display=1
+            <if test="_parameter !=null and _parameter!= ''">and gac.path=#{pathName}</if>
+        </where>
+            order by RAND() limit 1
+    </select>
+
+    <!--    根据目录ID查询首页大屏的四篇文章-->
+    <select id="selectFourArticleByCategory" resultMap="GpArticlesResult">
+        select ga.id, ga.author_name, ga.author_id, ga.article_title, ga.article_content, ga.article_category, gac.path, ga.like_count, ga.view_count, ga.create_time,
+         ga.update_time,ga.is_display from gp_articles ga left join gp_article_category gac on ga.article_category=gac.id
+        <where>
+            and ga.is_display=1
+            <if test="_parameter !=null and _parameter!= ''">and gac.path=#{pathName}</if>
+        </where>
+            order BY RAND() limit 4
+    </select>
+
+    <select id="selectGpArticlesList" parameterType="GpArticles" resultMap="GpArticlesResult">
+        <include refid="selectGpArticlesVo"/>
+        <where>
+            <if test="authorName != null  and authorName != ''"> and author_name like concat('%', #{authorName}, '%')</if>
+            <if test="authorId != null "> and author_id = #{authorId}</if>
+            <if test="articleTitle != null  and articleTitle != ''"> and article_title like concat('%',#{articleTitle},'%')</if>
+            <if test="articleContent != null  and articleContent != ''"> and article_content = #{articleContent}</if>
+            <if test="articleCategory != null  and articleCategory != ''"> and article_category = #{articleCategory}</if>
+            <if test="likeCount != null "> and LOCATE(#{likeCount},like_count) </if>
+            <if test="viewCount != null "> and LOCATE(#{viewCount},view_count) </if>
+            <if test="isDisplay != null "> and is_display = #{isDisplay}</if>
+        </where>
+        order by create_time desc, update_time desc
+    </select>
+
+<!--    提供前端博客用户查询文章列表，首页混合所有类型，is_display=1查询可以展示的-->
+    <select id="selectGpArticlesListForUser" parameterType="GpArticles" resultMap="GpArticlesResult">
+        <include refid="selectGpArticlesVo"/>
+        <where>
+            <if test="authorName != null  and authorName != ''"> and author_name like concat('%', #{authorName}, '%')</if>
+            <if test="authorId != null "> and author_id = #{authorId}</if>
+            <if test="articleTitle != null  and articleTitle != ''"> and article_title = #{articleTitle}</if>
+            <if test="articleContent != null  and articleContent != ''"> and article_content = #{articleContent}</if>
+            <if test="articleCategory != null  and articleCategory != ''"> and article_category = #{articleCategory}</if>
+            <if test="likeCount != null "> and like_count = #{likeCount}</if>
+            <if test="viewCount != null "> and view_count = #{viewCount}</if>
+            and is_display = 1
+        </where>
+        order by create_time desc,like_count desc,view_count desc
+    </select>
+
+    <select id="selectGpArticlesById" parameterType="Long" resultMap="GpArticlesResult">
+        <include refid="selectGpArticlesVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectGpArticlesByIdForUser" resultMap="GpArticlesResult">
+        <include refid="selectGpArticlesVo"/>
+        where is_display=#{isDisplay} and id = #{id}
+    </select>
+
+    <select id="selectGpArticlesByIdForWeb" parameterType="Long" resultMap="GpArticlesResult">
+        <include refid="selectGpArticlesVo"/>
+        where is_display=1 and id = #{id}
+    </select>
+
+    <insert id="insertGpArticles" parameterType="GpArticles" useGeneratedKeys="true" keyColumn="id"  keyProperty="id">
+        insert into gp_articles
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="authorName != null">author_name,</if>
+            <if test="authorId != null">author_id,</if>
+            <if test="articleTitle != null">article_title,</if>
+            <if test="articleContent != null">article_content,</if>
+            <if test="articleCategory != null">article_category,</if>
+            <if test="likeCount != null">like_count,</if>
+            <if test="viewCount != null">view_count,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="isDisplay != null">is_display,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="authorName != null">#{authorName},</if>
+            <if test="authorId != null">#{authorId},</if>
+            <if test="articleTitle != null">#{articleTitle},</if>
+            <if test="articleContent != null">#{articleContent},</if>
+            <if test="articleCategory != null">#{articleCategory},</if>
+            <if test="likeCount != null">#{likeCount},</if>
+            <if test="viewCount != null">#{viewCount},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="isDisplay != null">#{isDisplay},</if>
+         </trim>
+    </insert>
+
+    <insert id="userWriteGpArticles" parameterType="GpArticles">
+        insert into gp_articles
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="authorName != null">author_name,</if>
+            <if test="authorId != null">author_id,</if>
+            <if test="articleTitle != null">article_title,</if>
+            <if test="articleContent != null">article_content,</if>
+            <if test="articleCategory != null">article_category,</if>
+            <if test="likeCount != null">like_count,</if>
+            <if test="viewCount != null">view_count,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="isDisplay != null">is_display,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="authorName != null">#{authorName},</if>
+            <if test="authorId != null">#{authorId},</if>
+            <if test="articleTitle != null">#{articleTitle},</if>
+            <if test="articleContent != null">#{articleContent},</if>
+            <if test="articleCategory != null">#{articleCategory},</if>
+            <if test="likeCount != null">#{likeCount},</if>
+            <if test="viewCount != null">#{viewCount},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="isDisplay != null">#{isDisplay},</if>
+        </trim>
+    </insert>
+
+    <update id="updateGpArticles" parameterType="GpArticles">
+        update gp_articles
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="authorName != null">author_name = #{authorName},</if>
+            <if test="authorId != null">author_id = #{authorId},</if>
+            <if test="articleTitle != null">article_title = #{articleTitle},</if>
+            <if test="articleContent != null">article_content = #{articleContent},</if>
+            <if test="articleCategory != null">article_category = #{articleCategory},</if>
+            <if test="likeCount != null">like_count = #{likeCount},</if>
+            <if test="viewCount != null">view_count = #{viewCount},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="isDisplay != null">is_display = #{isDisplay},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+<!--    用于用户端更新浏览量和点赞数-->
+    <update id="updateGpArticlesForUser" parameterType="GpArticles">
+        update gp_articles
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="likeCount != null">like_count = #{likeCount},</if>
+            <if test="viewCount != null">view_count = #{viewCount},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGpArticlesById" parameterType="Long">
+        delete from gp_articles where id = #{id}
+    </delete>
+
+    <delete id="deleteGpArticlesByIds" parameterType="String">
+        delete from gp_articles where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+<!--    根据标签ID或标签名称查询文章列表-->
+    <select id="selectTagDeArticle" resultMap="GpArticlesResult" >
+        select ga.id, ga.author_name, ga.author_id, ga.article_title, ga.article_content, ga.article_category, ga.like_count,
+         ga.view_count, ga.create_time, ga.update_time from gp_articles ga left join gp_article_map_tag gamt on ga.id=gamt.aticle_id
+          left join gp_article_tags gat on gat.id=gamt.article_tag
+         <where>
+             <if test="tagName != null">and gat.tag_name=#{tagName}</if>
+             <if test="tagId != null">and gat.id=#{tagId}</if>
+             and ga.is_display=1
+         </where>order by ga.create_time desc
+    </select>
+
+    <!--    子查询通过文章ID查询所属标签-->
+    <select id="selectTagByArticleId" resultMap="GpArticleTagsResult">
+        select gat.id, gat.tag_name, gat.tag_info from gp_article_tags gat left join gp_article_map_tag gamt
+        on gat.id=gamt.article_tag where gamt.aticle_id=#{articleId}
+    </select>
+
+    <!--根据行号取前一篇后一篇，要考虑你当前的查询排序，如是默认的按照ASC行号增大排序，那么查询<就是正常的下一篇，
+        否则如果是DESC那么就是前一篇，我这里是按照ASC排序，所以>的判断实际显示是前一条,实现后一条则相反-->
+    <select id="selectPrevGpArticle" resultMap="GpArticlesNextPrevResult">
+        SELECT m.* FROM
+         (SELECT c.id, c.article_title, c.rownum FROM (SELECT a.id, a.article_title,a.article_category, a.create_time, (@rownum1 := @rownum1 + 1) AS rownum
+        FROM gp_articles a, (SELECT @rownum1 := 0) b where a.is_display=1) c left join gp_article_category gac on c.article_category=gac.id
+          <where>
+              <if test="pathName != null and pathName != ''">and gac.path = #{pathName}</if>
+          </where>
+          order by c.create_time ASC ) m -- 1.查询文章列表以及行号（rownum）
+        ,(SELECT c.rownum FROM (SELECT a.id, a.article_title, a.article_category, (@rownum2 := @rownum2 + 1) AS rownum
+        FROM gp_articles a, (SELECT @rownum2 := 0) b WHERE a.is_display=1) c left join gp_article_category gac on c.article_category=gac.id
+         <where>
+             <if test="pathName != null and pathName != ''">and gac.path = #{pathName}</if>
+             and c.id =#{articleId}
+         </where>
+         ) n -- 2.查询当前文章在文章列表中的行号
+         WHERE m.rownum > n.rownum -- 3.通过比较行号来寻找上一篇和下一篇，大于号(>)代表下一篇，小于号(&lt;)代表上一篇
+        LIMIT 1
+    </select>
+    <!--根据行号取后一篇，我这里是按照desc排序，所以<的判断实际显示是后一条-->
+    <!--使用CDATA标记，以"<![CDATA[ "开始，以" ]]>,避免解析小于号"-->
+    <select id="selectNextGpArticle" resultMap="GpArticlesNextPrevResult">
+        SELECT m.* FROM
+         (SELECT c.id, c.article_title, c.rownum FROM (SELECT a.id, a.article_title,a.article_category, a.create_time, (@rownum1 := @rownum1 + 1) AS rownum
+        FROM gp_articles a, (SELECT @rownum1 := 0) b where a.is_display=1) c left join gp_article_category gac on c.article_category=gac.id
+         <where>
+             <if test="pathName != null and pathName != ''">and gac.path = #{pathName}</if>
+         </where>
+         order by c.create_time DESC ) m -- 1.查询文章列表以及行号（rownum）
+        ,(SELECT c.rownum FROM (SELECT a.id, a.article_title, a.article_category, (@rownum2 := @rownum2 + 1) AS rownum
+        FROM gp_articles a, (SELECT @rownum2 := 0) b WHERE a.is_display=1) c left join gp_article_category gac on c.article_category=gac.id
+         <where>
+             <if test="pathName != null and pathName != ''">and gac.path = #{pathName}</if>
+             and c.id =#{articleId}
+         </where>
+         ) n -- 2.查询当前文章在文章列表中的行号
+         WHERE m.rownum &lt; n.rownum -- 3.通过比较行号来寻找上一篇和下一篇，大于号(>)代表下一篇，小于号(&lt;)代表上一篇
+        LIMIT 1
+    </select>
+</mapper>

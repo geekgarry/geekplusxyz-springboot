@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maike.webapp.function.mapper.GpArticleCommentMapper">
+
+    <resultMap type="GpUserComment" id="GpUserCommentResult">
+        <result property="id"    column="id"    />
+        <result property="replyId"    column="reply_id"    />
+        <result property="name"    column="name"    />
+        <result property="email"    column="email"    />
+        <result property="website"    column="website"    />
+        <result property="content"    column="content"    />
+        <result property="topicId"    column="topic_id"    />
+        <result property="topicType"    column="topic_type"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="userId"    column="user_id"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="replyName"    column="reply_name"    />
+        <result property="likeCount" column="like_count"    />
+        <result property="replyCount" column="reply_count"    />
+    </resultMap>
+
+    <resultMap type="GpUserComment" id="GpUserReplyCommentResult">
+        <result property="id"    column="id"    />
+        <result property="replyId"    column="reply_id"    />
+        <result property="name"    column="name"    />
+        <result property="email"    column="email"    />
+        <result property="website"    column="website"    />
+        <result property="content"    column="content"    />
+        <result property="topicId"    column="topic_id"    />
+        <result property="topicType"    column="topic_type"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="userId"    column="user_id"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="replyName"    column="reply_name"    />
+        <result property="likeCount" column="like_count"    />
+        <collection property="children" javaType="java.util.ArrayList"
+        ofType="GpUserComment" select="getReplyArticleComment" column="{id=id}"></collection>
+    </resultMap>
+
+    <sql id="selectGpArticleCommentVo">
+        select id, reply_id, name, email, website, content, topic_id, topic_type, create_time, user_id, parent_id, reply_name, like_count from gp_article_comment
+    </sql>
+
+<!--    单张表：用在网站查询获取用户评论，考虑到两种情况，一种是用户网站留言topic_id为null或空值，一种是用户文章留言topic_id等于文章的ID-->
+<!--    通过mybatis动态sql，使用choose，when，otherwise实现if-else-if的判断机制 topicId=0或者是为null就是查询文章用户留言-->
+    <select id="getArticleComment" parameterType="GpUserComment" resultMap="GpUserReplyCommentResult">
+		SELECT guc.id, guc.name, guc.email, guc.website, guc.content, guc.topic_id, guc.topic_type,
+		 guc.create_time, guc.user_id, guc.parent_id, guc.reply_name, guc.reply_id, guc.like_count
+		 from gp_article_comment guc
+        <where>
+            <if test="replyId != null "> and guc.reply_id = #{replyId}</if>
+            <if test="name != null  and name != ''"> and guc.name like concat('%', #{name}, '%')</if>
+            <if test="email != null  and email != ''"> and guc.email = #{email}</if>
+            <if test="website != null  and website != ''"> and guc.website = #{website}</if>
+            <if test="content != null  and content != ''"> and guc.content = #{content}</if>
+            <choose>
+                <when test="topicId != null and topicId != ''">
+                    and guc.topic_id = #{topicId}
+                </when>
+                <otherwise>
+                    and (guc.topic_id IS null or guc.topic_id='')
+                </otherwise>
+            </choose>
+            <if test="topicType != null  and topicType != ''"> and guc.topic_type = #{topicType}</if>
+            <if test="userId != null  and userId != ''"> and guc.user_id = #{userId}</if>
+            <if test="replyName != null  and replyName != ''"> and guc.reply_name = #{replyName}</if>
+            <if test="parentId != null ">and guc.parent_id = #{parentId}</if>
+        </where>
+		ORDER BY guc.create_time DESC
+	</select>
+
+<!--    子查询获取回复的信息-->
+    <select id="getReplyArticleComment" resultMap="GpUserCommentResult">
+		SELECT guc.id, guc.name, guc.email, guc.website, guc.content, guc.topic_id, guc.topic_type,
+		 guc.create_time, guc.user_id, guc.parent_id, guc.reply_name, guc.reply_id, guc.like_count
+		 from gp_article_comment guc where guc.parent_id=#{id} ORDER BY guc.create_time ASC
+	</select>
+
+<!--    获取所有评论的条数-->
+    <select id="getArticleCommentCount" resultType="java.lang.Integer">
+		select count(id) from gp_article_comment guc
+	</select>
+
+<!--    获取用户文章评论的最新十条数据-->
+    <select id="getLatestArticleComment" resultMap="GpUserCommentResult">
+		SELECT guc.id, guc.name, guc.email, guc.website, guc.content, guc.topic_id, guc.topic_type,
+		 guc.create_time, guc.user_id, guc.parent_id, guc.reply_name, guc.like_count
+		 from gp_article_comment guc where guc.topic_id is not null or guc.topic_id !='' ORDER BY guc.create_time desc limit 10
+	</select>
+
+<!--    获取热门的六条用户文章留言评论-->
+    <select id="getHotWebArticleComment" resultMap="GpUserCommentResult">
+        select (select count(id) from gp_user_comment where parent_id=guc.id) as reply_count, guc.id,
+         guc.reply_id, guc.name, guc.email, guc.content, guc.create_time, guc.user_id, guc.parent_id,
+         guc.reply_name, guc.like_count from gp_article_comment guc where guc.parent_id=0 and
+         (guc.topic_id IS null or guc.topic_id='') ORDER BY reply_count desc, guc.create_time desc limit 6
+    </select>
+
+    <select id="selectGpArticleCommentList" parameterType="GpUserComment" resultMap="GpUserCommentResult">
+        <include refid="selectGpArticleCommentVo"/>
+        <where>
+            <if test="replyId != null "> and reply_id = #{replyId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="website != null  and website != ''"> and website = #{website}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="topicId != null  and topicId != ''"> and topic_id = #{topicId}</if>
+            <if test="topicType != null  and topicType != ''"> and topic_type = #{topicType}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="parentId != null"> and parent_id = #{parentId}</if>
+            <if test="replyName != null  and replyName != ''"> and reply_name = #{replyName}</if>
+        </where>
+    </select>
+
+    <select id="selectGpArticleCommentById" parameterType="Long" resultMap="GpUserCommentResult">
+        <include refid="selectGpArticleCommentVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectArticleComment" >
+        select id, reply_id, name, email, website, content, topic_id, topic_type, create_time, user_id,parent_id,reply_name from gp_article_comment
+    </select>
+
+<!--    网站用户直接留言评论回复-->
+    <insert id="insertArticleComment" parameterType="GpUserComment" useGeneratedKeys="true" keyProperty="id">
+        insert into gp_article_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="replyId != null">reply_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="email != null">email,</if>
+            <if test="website != null">website,</if>
+            <if test="content != null">content,</if>
+            <if test="topicId != null">topic_id,</if>
+            <if test="topicType != null">topic_type,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="replyName != null">reply_name,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="replyId != null">#{replyId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="email != null">#{email},</if>
+            <if test="website != null">#{website},</if>
+            <if test="content != null">#{content},</if>
+            <if test="topicId != null">#{topicId},</if>
+            <if test="topicType != null">#{topicType},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="replyName != null">#{replyName},</if>
+        </trim>
+    </insert>
+
+    <insert id="insertGpArticleComment" parameterType="GpUserComment" useGeneratedKeys="true" keyProperty="id">
+        insert into gp_article_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="replyId != null">reply_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="email != null">email,</if>
+            <if test="website != null">website,</if>
+            <if test="content != null">content,</if>
+            <if test="topicId != null">topic_id,</if>
+            <if test="topicType != null">topic_type,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="replyName != null">reply_name,</if>
+            <if test="likeCount != null">like_count,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="replyId != null">#{replyId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="email != null">#{email},</if>
+            <if test="website != null">#{website},</if>
+            <if test="content != null">#{content},</if>
+            <if test="topicId != null">#{topicId},</if>
+            <if test="topicType != null">#{topicType},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="replyName != null">#{replyName},</if>
+            <if test="likeCount != null">#{likeCount},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGpArticleComment" parameterType="GpUserComment">
+        update gp_article_comment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="replyId != null">reply_id = #{replyId},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="website != null">website = #{website},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="topicId != null">topic_id = #{topicId},</if>
+            <if test="topicType != null">topic_type = #{topicType},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="replyName != null">reply_name = #{replyName},</if>
+            <if test="likeCount != null">like_count = #{likeCount},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGpArticleCommentById" parameterType="Long">
+        delete from gp_article_comment where id = #{id}
+    </delete>
+
+    <delete id="deleteGpArticleCommentByIds" parameterType="String">
+        delete from gp_article_comment where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

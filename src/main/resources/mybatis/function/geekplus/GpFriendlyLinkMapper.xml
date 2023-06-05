@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maike.webapp.function.mapper.GpFriendlyLinkMapper">
+
+    <resultMap type="GpFriendlyLink" id="GpFriendlyLinkResult">
+        <result property="id"    column="id"    />
+        <result property="linkUrl"    column="link_url"    />
+        <result property="linkName"    column="link_name"    />
+        <result property="linkIntro"    column="link_intro"    />
+        <result property="appReason"    column="app_reason"    />
+        <result property="isDisplay"    column="is_display"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectGpFriendlyLinkVo">
+        select id, link_url, link_name, link_intro, app_reason, is_display, create_time, update_time from gp_friendly_link
+    </sql>
+
+<!--    首页显示友情链接，is_display等于1-->
+    <select id="displayGpFriendlyLink" resultMap="GpFriendlyLinkResult">
+        <include refid="selectGpFriendlyLinkVo"/>
+        <where>
+            is_display = 1
+        </where>
+    </select>
+    <select id="selectGpFriendlyLinkList" parameterType="GpFriendlyLink" resultMap="GpFriendlyLinkResult">
+        <include refid="selectGpFriendlyLinkVo"/>
+        <where>
+            <if test="linkUrl != null  and linkUrl != ''"> and link_url = #{linkUrl}</if>
+            <if test="linkName != null  and linkName != ''"> and link_name like concat('%', #{linkName}, '%')</if>
+            <if test="linkIntro != null  and linkIntro != ''"> and link_intro = #{linkIntro}</if>
+            <if test="appReason != null  and appReason != ''"> and app_reason = #{appReason}</if>
+            <if test="isDisplay != null  and isDisplay != ''"> and is_display = #{isDisplay}</if>
+<!--            <if test="createTime != null  and createTime != ''"> and create_time = #{createTime}</if>-->
+<!--            <if test="updateTime != null  and updateTime != ''"> and update_time = #{updateTime}</if>-->
+        </where>
+    </select>
+
+    <select id="selectGpFriendlyLinkById" parameterType="Long" resultMap="GpFriendlyLinkResult">
+        <include refid="selectGpFriendlyLinkVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertGpFriendlyLink" parameterType="GpFriendlyLink" useGeneratedKeys="true" keyProperty="id">
+        insert into gp_friendly_link
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="linkUrl != null">link_url,</if>
+            <if test="linkName != null">link_name,</if>
+            <if test="linkIntro != null">link_intro,</if>
+            <if test="appReason != null">app_reason,</if>
+            <if test="isDisplay != null">is_display,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="linkUrl != null">#{linkUrl},</if>
+            <if test="linkName != null">#{linkName},</if>
+            <if test="linkIntro != null">#{linkIntro},</if>
+            <if test="appReason != null">#{appReason},</if>
+            <if test="isDisplay != null">#{isDisplay},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGpFriendlyLink" parameterType="GpFriendlyLink">
+        update gp_friendly_link
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="linkUrl != null">link_url = #{linkUrl},</if>
+            <if test="linkName != null">link_name = #{linkName},</if>
+            <if test="linkIntro != null">link_intro = #{linkIntro},</if>
+            <if test="appReason != null">app_reason = #{appReason},</if>
+            <if test="isDisplay != null">is_display = #{isDisplay},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGpFriendlyLinkById" parameterType="Long">
+        delete from gp_friendly_link where id = #{id}
+    </delete>
+
+    <delete id="deleteGpFriendlyLinkByIds" parameterType="String">
+        delete from gp_friendly_link where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

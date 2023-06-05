@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maike.webapp.function.mapper.GpAboutWebMapper">
+
+    <resultMap type="GpAboutWeb" id="GpAboutWebResult">
+        <result property="id"    column="id"    />
+        <result property="gpName"    column="gp_name"    />
+        <result property="gpTitle"    column="gp_title"    />
+        <result property="gpContent"    column="gp_content"    />
+        <result property="gpWebName"    column="gp_web_name"    />
+        <result property="gpWebTitle"    column="gp_web_title"    />
+        <result property="gpWebInfo"    column="gp_web_info"    />
+        <result property="gpWebIcp"    column="gp_web_icp"    />
+        <result property="gpWebBeian"    column="gp_web_beian"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectGpAboutWebVo">
+        select id, gp_name, gp_title, gp_content, gp_web_name, gp_web_title, gp_web_info, gp_web_icp, gp_web_beian, create_time from gp_about_web
+    </sql>
+
+    <select id="selectGpAboutWebList" parameterType="GpAboutWeb" resultMap="GpAboutWebResult">
+        <include refid="selectGpAboutWebVo"/>
+        <where>
+            <if test="gpName != null  and gpName != ''"> and gp_name like concat('%', #{gpName}, '%')</if>
+            <if test="gpTitle != null  and gpTitle != ''"> and gp_title = #{gpTitle}</if>
+            <if test="gpContent != null  and gpContent != ''"> and gp_content = #{gpContent}</if>
+            <if test="gpWebName != null  and gpWebName != ''"> and gp_web_name like concat('%', #{gpWebName}, '%')</if>
+            <if test="gpWebTitle != null  and gpWebTitle != ''"> and gp_web_title = #{gpWebTitle}</if>
+            <if test="gpWebInfo != null  and gpWebInfo != ''"> and gp_web_info = #{gpWebInfo}</if>
+            <if test="gpWebIcp != null  and gpWebIcp != ''"> and gp_web_icp = #{gpWebIcp}</if>
+            <if test="gpWebBeian != null  and gpWebBeian != ''"> and gp_web_beian = #{gpWebBeian}</if>
+        </where>
+    </select>
+
+<!--    查询网站信息，比如标题，网站介绍，网站底部备案信息等-->
+    <select id="selectGpWebInfo" parameterType="Integer" resultMap="GpAboutWebResult">
+        select id, gp_web_name, gp_web_title, gp_web_info, gp_web_icp, gp_web_beian from gp_about_web
+        <where>
+            id=#{id}
+        </where>
+    </select>
+
+<!--    查询关于我的信息，我的个人介绍等-->
+    <select id="selectAboutGpWeb" parameterType="Integer" resultMap="GpAboutWebResult">
+        select id, gp_name, gp_title, gp_content, gp_web_name, create_time from gp_about_web
+        <where>
+            id=#{id}
+        </where>
+    </select>
+
+    <select id="selectGpAboutWebById" parameterType="Integer" resultMap="GpAboutWebResult">
+        <include refid="selectGpAboutWebVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertGpAboutWeb" parameterType="GpAboutWeb" useGeneratedKeys="true" keyProperty="id">
+        insert into gp_about_web
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="gpName != null">gp_name,</if>
+            <if test="gpTitle != null">gp_title,</if>
+            <if test="gpContent != null">gp_content,</if>
+            <if test="gpWebName != null">gp_web_name,</if>
+            <if test="gpWebTitle != null">gp_web_title,</if>
+            <if test="gpWebInfo != null">gp_web_info,</if>
+            <if test="gpWebIcp != null">gp_web_icp,</if>
+            <if test="gpWebBeian != null">gp_web_beian,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="gpName != null">#{gpName},</if>
+            <if test="gpTitle != null">#{gpTitle},</if>
+            <if test="gpContent != null">#{gpContent},</if>
+            <if test="gpWebName != null">#{gpWebName},</if>
+            <if test="gpWebTitle != null">#{gpWebTitle},</if>
+            <if test="gpWebInfo != null">#{gpWebInfo},</if>
+            <if test="gpWebIcp != null">#{gpWebIcp},</if>
+            <if test="gpWebBeian != null">#{gpWebBeian},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGpAboutWeb" parameterType="GpAboutWeb">
+        update gp_about_web
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="gpName != null">gp_name = #{gpName},</if>
+            <if test="gpTitle != null">gp_title = #{gpTitle},</if>
+            <if test="gpContent != null">gp_content = #{gpContent},</if>
+            <if test="gpWebName != null">gp_web_name = #{gpWebName},</if>
+            <if test="gpWebTitle != null">gp_web_title = #{gpWebTitle},</if>
+            <if test="gpWebInfo != null">gp_web_info = #{gpWebInfo},</if>
+            <if test="gpWebIcp != null">gp_web_icp = #{gpWebIcp},</if>
+            <if test="gpWebBeian != null">gp_web_beian = #{gpWebBeian},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGpAboutWebById" parameterType="Integer">
+        delete from gp_about_web where id = #{id}
+    </delete>
+
+    <delete id="deleteGpAboutWebByIds" parameterType="String">
+        delete from gp_about_web where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

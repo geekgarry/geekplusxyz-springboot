@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maike.webapp.function.mapper.GpArticleCategoryMapper">
+
+    <resultMap type="GpArticleCategory" id="GpArticleCategoryResult">
+        <result property="id"    column="id"    />
+        <result property="categoryName"    column="category_name"    />
+        <result property="categoryInfo"    column="category_info"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="priorityId"    column="priority_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="path"    column="path"    />
+        <result property="component"    column="component"    />
+        <result property="permission"    column="permission"    />
+        <result property="menuType"    column="menu_type"    />
+        <result property="icon"    column="icon"    />
+    </resultMap>
+
+    <resultMap type="GpArticleCategory" id="GpArticleSubParentCategoryResult">
+        <result property="id"    column="id"    />
+        <result property="categoryName"    column="category_name"    />
+        <result property="categoryInfo"    column="category_info"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="priorityId"    column="priority_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="path"    column="path"    />
+        <result property="component"    column="component"    />
+        <result property="permission"    column="permission"    />
+        <result property="menuType"    column="menu_type"    />
+        <result property="icon"    column="icon"    />
+        <collection property="children" select="selectSubCategory" column="{id=id}"
+                    javaType="java.util.ArrayList" ofType="GpArticleCategory" >
+        </collection>
+    </resultMap>
+
+    <sql id="selectGpArticleCategoryVo">
+        select id, category_name, category_info, parent_id, priority_id,create_time,update_time,path,component,permission,menu_type,icon from gp_article_category
+    </sql>
+
+    <select id="selectGpArticleCategoryList" parameterType="GpArticleCategory" resultMap="GpArticleCategoryResult">
+        <include refid="selectGpArticleCategoryVo"/>
+        <where>
+            <if test="categoryName != null  and categoryName != ''"> and category_name like concat('%', #{categoryName}, '%')</if>
+            <if test="categoryInfo != null  and categoryInfo != ''"> and category_info = #{categoryInfo}</if>
+            <if test="path != null  and path != ''"> and path = #{path}</if>
+            <if test="component != null  and component != ''"> and component = #{component}</if>
+            <if test="permission != null  and permission != ''"> and permission = #{permission}</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+            <if test="priorityId != null "> and priority_id = #{priorityId}</if>
+            <if test="menuType != null and menuType !=''"> and menu_type = #{menuType}</if>
+            <if test="icon != null and icon !=''"> and icon = #{icon}</if>
+        </where>
+    </select>
+
+    <select id="selectGpArticleCategoryById" parameterType="Integer" resultMap="GpArticleCategoryResult">
+        <include refid="selectGpArticleCategoryVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertGpArticleCategory" parameterType="GpArticleCategory" useGeneratedKeys="true" keyProperty="id">
+        insert into gp_article_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="categoryName != null">category_name,</if>
+            <if test="categoryInfo != null">category_info,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="priorityId != null">priority_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="path != null">path,</if>
+            <if test="component != null">component,</if>
+            <if test="permission != null">permission,</if>
+            <if test="menuType != null">menu_type,</if>
+            <if test="icon != null">icon,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="categoryName != null">#{categoryName},</if>
+            <if test="categoryInfo != null">#{categoryInfo},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="priorityId != null">#{priorityId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="path != null">#{path},</if>
+            <if test="component != null">#{component},</if>
+            <if test="permission != null">#{permission},</if>
+            <if test="menuType != null">#{menuType},</if>
+            <if test="icon != null">#{icon},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGpArticleCategory" parameterType="GpArticleCategory">
+        update gp_article_category
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="categoryName != null">category_name = #{categoryName},</if>
+            <if test="categoryInfo != null">category_info = #{categoryInfo},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="priorityId != null">priority_id = #{priorityId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="path != null">path = #{path},</if>
+            <if test="component != null">component = #{component},</if>
+            <if test="permission != null">permission = #{permission},</if>
+            <if test="menuType != null">menu_type = #{menuType},</if>
+            <if test="icon != null">icon = #{icon},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGpArticleCategoryById" parameterType="Integer">
+        delete from gp_article_category where id = #{id}
+    </delete>
+
+    <delete id="deleteGpArticleCategoryByIds" parameterType="String">
+        delete from gp_article_category where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+<!--    查询父目录，parent_id=0-->
+    <select id="selectParentCategory" resultMap="GpArticleCategoryResult">
+        select id, category_name, category_info,path,component,permission,menu_type,icon from gp_article_category where parent_id=0 order by priority_id asc
+    </select>
+
+    <!--    查询子父目录输出菜单，parent_id=0，子查询parent_id等于父目录的id-->
+    <select id="selectSubParentCategory" resultMap="GpArticleSubParentCategoryResult">
+        select id, category_name, category_info,path,component,permission,menu_type,icon from gp_article_category where parent_id=0 order by priority_id asc
+    </select>
+
+<!--    子查询，菜单目录,配合上一条可以实现嵌套查询目录形式-->
+    <select id="selectSubCategory" resultMap="GpArticleCategoryResult">
+        select id, category_name, category_info,path,component,permission,menu_type,icon from gp_article_category where parent_id=#{id} order by priority_id asc
+    </select>
+
+</mapper>

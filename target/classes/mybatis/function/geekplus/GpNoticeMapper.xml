@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maike.webapp.function.mapper.GpNoticeMapper">
+
+    <resultMap type="GpNotice" id="GpNoticeResult">
+        <result property="id"    column="id"    />
+        <result property="noticeTitle"    column="notice_title"    />
+        <result property="noticeContent"    column="notice_content"    />
+        <result property="noticeImg"    column="notice_img"    />
+        <result property="noticeLink"    column="notice_link"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectGpNoticeVo">
+        select id, notice_title, notice_content, notice_img, notice_link, create_time, update_time from gp_notice
+    </sql>
+
+    <select id="selectGpNoticeList" parameterType="GpNotice" resultMap="GpNoticeResult">
+        <include refid="selectGpNoticeVo"/>
+        <where>
+            <if test="noticeTitle != null  and noticeTitle != ''"> and notice_title = #{noticeTitle}</if>
+            <if test="noticeContent != null  and noticeContent != ''"> and notice_content = #{noticeContent}</if>
+            <if test="noticeImg != null  and noticeImg != ''"> and notice_img = #{noticeImg}</if>
+            <if test="noticeLink != null  and noticeLink != ''"> and notice_link = #{noticeLink}</if>
+        </where>
+    </select>
+
+    <select id="selectGpNoticeById" parameterType="Long" resultMap="GpNoticeResult">
+        <include refid="selectGpNoticeVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectGpNoticeNewOne" parameterType="Long" resultMap="GpNoticeResult">
+        <include refid="selectGpNoticeVo"/>
+        order by create_time desc,update_time desc limit 1
+    </select>
+
+    <select id="selectGpNoticeNewFive" parameterType="Long" resultMap="GpNoticeResult">
+        <include refid="selectGpNoticeVo"/>
+        order by create_time desc,update_time desc limit 5
+    </select>
+
+    <insert id="insertGpNotice" parameterType="GpNotice" useGeneratedKeys="true" keyProperty="id">
+        insert into gp_notice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="noticeTitle != null">notice_title,</if>
+            <if test="noticeContent != null">notice_content,</if>
+            <if test="noticeImg != null">notice_img,</if>
+            <if test="noticeLink != null">notice_link,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="noticeTitle != null">#{noticeTitle},</if>
+            <if test="noticeContent != null">#{noticeContent},</if>
+            <if test="noticeImg != null">#{noticeImg},</if>
+            <if test="noticeLink != null">#{noticeLink},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGpNotice" parameterType="GpNotice">
+        update gp_notice
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="noticeTitle != null">notice_title = #{noticeTitle},</if>
+            <if test="noticeContent != null">notice_content = #{noticeContent},</if>
+            <if test="noticeImg != null">notice_img = #{noticeImg},</if>
+            <if test="noticeLink != null">notice_link = #{noticeLink},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGpNoticeById" parameterType="Long">
+        delete from gp_notice where id = #{id}
+    </delete>
+
+    <delete id="deleteGpNoticeByIds" parameterType="String">
+        delete from gp_notice where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

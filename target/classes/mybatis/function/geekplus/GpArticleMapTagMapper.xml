@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maike.webapp.function.mapper.GpArticleMapTagMapper">
+
+    <resultMap type="GpArticleMapTag" id="GpArticleMapTagResult">
+        <result property="aticleId"    column="aticle_id"    />
+        <result property="articleTag"    column="article_tag"    />
+    </resultMap>
+
+    <sql id="selectGpArticleMapTagVo">
+        select aticle_id, article_tag from gp_article_map_tag
+    </sql>
+
+    <select id="selectGpArticleMapTagList" parameterType="GpArticleMapTag" resultMap="GpArticleMapTagResult">
+        <include refid="selectGpArticleMapTagVo"/>
+        <where>
+            <if test="aticleId != null "> and aticle_id = #{aticleId}</if>
+            <if test="articleTag != null "> and article_tag = #{articleTag}</if>
+        </where>
+    </select>
+
+    <select id="selectGpArticleMapTagById" parameterType="Long" resultMap="GpArticleMapTagResult">
+        <include refid="selectGpArticleMapTagVo"/>
+        where aticle_id = #{aticleId}
+    </select>
+
+    <insert id="insertGpArticleMapTag" parameterType="GpArticleMapTag">
+        insert into gp_article_map_tag
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="aticleId != null">aticle_id,</if>
+            <if test="articleTag != null">article_tag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="aticleId != null">#{aticleId},</if>
+            <if test="articleTag != null">#{articleTag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGpArticleMapTag" parameterType="GpArticleMapTag">
+        update gp_article_map_tag
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="articleTag != null">article_tag = #{articleTag},</if>
+        </trim>
+        where aticle_id = #{aticleId}
+    </update>
+
+    <delete id="deleteGpArticleMapTagById" parameterType="Long">
+        delete from gp_article_map_tag where aticle_id = #{aticleId}
+    </delete>
+
+    <delete id="deleteGpArticleMapTagByIds" parameterType="String">
+        delete from gp_article_map_tag where aticle_id in
+        <foreach item="aticleId" collection="array" open="(" separator="," close=")">
+            #{aticleId}
+        </foreach>
+    </delete>
+
+</mapper>

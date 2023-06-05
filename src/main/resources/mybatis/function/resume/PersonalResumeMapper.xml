@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maike.webapp.function.mapper.PersonalResumeMapper">
+
+    <resultMap type="com.maike.webapp.function.domain.PersonalResume" id="PersonalResumeResult">
+        <result property="id"    column="id"    />
+        <result property="nickName"    column="nick_name"    />
+        <result property="realName"    column="real_name"    />
+        <result property="gender"    column="gender"    />
+        <result property="personalIntroduce"    column="personal_introduce"    />
+        <result property="liveAddressNow"    column="live_address_now"    />
+        <result property="birthDay"    column="birth_day"    />
+        <result property="contactPhone"    column="contact_phone"    />
+        <result property="contactEmail"    column="contact_email"    />
+        <result property="jobIntention"    column="job_intention"    />
+        <result property="headPic"    column="head_pic"    />
+        <result property="universityName"    column="university_name"    />
+        <result property="universityStudyTime"    column="university_study_time"    />
+        <result property="unSpecializedSubject"    column="un_specialized_subject"    />
+        <result property="unMainCoursesStudy"    column="un_main_courses_study"    />
+        <result property="selfEvaluation"    column="self_evaluation"    />
+        <result property="masterLanguage"    column="master_language"    />
+        <result property="professionSkill"    column="profession_skill"    />
+        <result property="officeSkill"    column="office_skill"    />
+        <result property="education"    column="education"    />
+        <result property="nation"    column="nation"    />
+        <result property="height"    column="height"    />
+        <collection property="listTech" ofType="com.maike.webapp.function.domain.PersonalTechnology" >
+<!--            <id property="id" column="id" />-->
+            <result property="technologyName" column="technology_name" />
+            <result property="technologyScore" column="technology_score" />
+<!--            <result property="resumeId"    column="resume_id"    />-->
+        </collection>
+        <collection property="listProject" ofType="com.maike.webapp.function.domain.ProjectExperience" >
+<!--            <id property="id" column="id" />-->
+            <result property="projectName" column="project_name" />
+            <result property="projectContent" column="project_content" />
+            <result property="projectTime" column="project_time" />
+            <result property="usingTechnology" column="using_technology" />
+        </collection>
+        <collection property="listWork" ofType="com.maike.webapp.function.domain.ResumeWorkExperience" >
+<!--            <id property="id" column="id" />-->
+            <result property="workTime" column="work_time" />
+            <result property="workCompany" column="work_company" />
+            <result property="workPosition" column="work_position" />
+            <result property="workIntroduce" column="work_introduce" />
+            <result property="workType" column="work_type" />
+        </collection>
+    </resultMap>
+
+    <sql id="selectPersonalResumeVo">
+        select id, nick_name, real_name, gender, personal_introduce, live_address_now, birth_day, contact_phone, contact_email, job_intention, head_pic, university_name, university_study_time, un_specialized_subject, un_main_courses_study, self_evaluation, master_language, profession_skill, office_skill, education, nation, height from personal_resume
+    </sql>
+    <sql id="selectResumeInfoVo">
+        select pr.id, pr.nick_name, pr.real_name, pr.gender, pr.personal_introduce, pr.live_address_now, pr.birth_day, pr.contact_phone, pr.contact_email,
+               pr.job_intention, pr.head_pic, pr.university_name, pr.university_study_time, pr.un_specialized_subject, pr.un_main_courses_study,
+               pr.self_evaluation, pr.master_language, pr.profession_skill, pr.office_skill, pr.education, pr.nation, pr.height, pt.technology_name, pt.technology_score,
+            pe.project_name, pe.project_time, pe.project_content, pe.using_technology,rwe.work_time, rwe.work_company, rwe.work_position, rwe.work_introduce, rwe.work_type
+        from personal_resume pr
+        left join personal_technology pt on pt.resume_id=pr.id
+        left join project_experience pe on pe.resume_id=pr.id
+        left join resume_work_experience rwe on rwe.resume_id=pr.id and rwe.work_visible=1
+    </sql>
+    <select id="selectResumeInfo" resultMap="PersonalResumeResult">
+        <include refid="selectResumeInfoVo"/>
+        where pr.id = #{resumeId} order by pe.priority_id DESC,rwe.priority_id desc
+    </select>
+    <select id="selectPersonalResumeList" parameterType="PersonalResume" resultMap="PersonalResumeResult">
+        <include refid="selectPersonalResumeVo"/>
+        <where>
+            <if test="nickName != null  and nickName != ''"> and nick_name like concat('%', #{nickName}, '%')</if>
+            <if test="realName != null  and realName != ''"> and real_name like concat('%', #{realName}, '%')</if>
+            <if test="gender != null "> and gender = #{gender}</if>
+            <if test="personalIntroduce != null  and personalIntroduce != ''"> and personal_introduce = #{personalIntroduce}</if>
+            <if test="liveAddressNow != null  and liveAddressNow != ''"> and live_address_now = #{liveAddressNow}</if>
+            <if test="birthDay != null "> and birth_day = #{birthDay}</if>
+            <if test="contactPhone != null  and contactPhone != ''"> and contact_phone = #{contactPhone}</if>
+            <if test="contactEmail != null  and contactEmail != ''"> and contact_email = #{contactEmail}</if>
+            <if test="jobIntention != null  and jobIntention != ''"> and job_intention = #{jobIntention}</if>
+            <if test="headPic != null  and headPic != ''"> and head_pic = #{headPic}</if>
+            <if test="universityName != null  and universityName != ''"> and university_name like concat('%', #{universityName}, '%')</if>
+            <if test="universityStudyTime != null  and universityStudyTime != ''"> and university_study_time = #{universityStudyTime}</if>
+            <if test="unSpecializedSubject != null  and unSpecializedSubject != ''"> and un_specialized_subject = #{unSpecializedSubject}</if>
+            <if test="unMainCoursesStudy != null  and unMainCoursesStudy != ''"> and un_main_courses_study = #{unMainCoursesStudy}</if>
+            <if test="selfEvaluation != null  and selfEvaluation != ''"> and self_evaluation = #{selfEvaluation}</if>
+            <if test="masterLanguage != null  and masterLanguage != ''"> and master_language = #{masterLanguage}</if>
+            <if test="professionSkill != null  and professionSkill != ''"> and profession_skill = #{professionSkill}</if>
+            <if test="officeSkill != null  and officeSkill != ''"> and office_skill = #{officeSkill}</if>
+            <if test="education != null  and education != ''"> and education = #{education}</if>
+            <if test="nation != null  and nation != ''"> and nation = #{nation}</if>
+            <if test="height != null  and height != ''"> and height = #{height}</if>
+        </where>
+    </select>
+
+    <select id="selectPersonalResumeById" parameterType="Long" resultMap="PersonalResumeResult">
+        <include refid="selectPersonalResumeVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPersonalResume" parameterType="PersonalResume" useGeneratedKeys="true" keyProperty="id">
+        insert into personal_resume
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="nickName != null">nick_name,</if>
+            <if test="realName != null and realName != ''">real_name,</if>
+            <if test="gender != null">gender,</if>
+            <if test="personalIntroduce != null">personal_introduce,</if>
+            <if test="liveAddressNow != null">live_address_now,</if>
+            <if test="birthDay != null">birth_day,</if>
+            <if test="contactPhone != null">contact_phone,</if>
+            <if test="contactEmail != null">contact_email,</if>
+            <if test="jobIntention != null">job_intention,</if>
+            <if test="headPic != null">head_pic,</if>
+            <if test="universityName != null">university_name,</if>
+            <if test="universityStudyTime != null">university_study_time,</if>
+            <if test="unSpecializedSubject != null">un_specialized_subject,</if>
+            <if test="unMainCoursesStudy != null">un_main_courses_study,</if>
+            <if test="selfEvaluation != null">self_evaluation,</if>
+            <if test="masterLanguage != null">master_language,</if>
+            <if test="professionSkill != null">profession_skill,</if>
+            <if test="officeSkill != null">office_skill,</if>
+            <if test="education != null">education,</if>
+            <if test="nation != null">nation,</if>
+            <if test="height != null">height,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="nickName != null">#{nickName},</if>
+            <if test="realName != null and realName != ''">#{realName},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="personalIntroduce != null">#{personalIntroduce},</if>
+            <if test="liveAddressNow != null">#{liveAddressNow},</if>
+            <if test="birthDay != null">#{birthDay},</if>
+            <if test="contactPhone != null">#{contactPhone},</if>
+            <if test="contactEmail != null">#{contactEmail},</if>
+            <if test="jobIntention != null">#{jobIntention},</if>
+            <if test="headPic != null">#{headPic},</if>
+            <if test="universityName != null">#{universityName},</if>
+            <if test="universityStudyTime != null">#{universityStudyTime},</if>
+            <if test="unSpecializedSubject != null">#{unSpecializedSubject},</if>
+            <if test="unMainCoursesStudy != null">#{unMainCoursesStudy},</if>
+            <if test="selfEvaluation != null">#{selfEvaluation},</if>
+            <if test="masterLanguage != null">#{masterLanguage},</if>
+            <if test="professionSkill != null">#{professionSkill},</if>
+            <if test="officeSkill != null">#{officeSkill},</if>
+            <if test="education != null">#{education},</if>
+            <if test="nation != null">#{nation},</if>
+            <if test="height != null">#{height},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePersonalResume" parameterType="PersonalResume">
+        update personal_resume
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="nickName != null">nick_name = #{nickName},</if>
+            <if test="realName != null and realName != ''">real_name = #{realName},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="personalIntroduce != null">personal_introduce = #{personalIntroduce},</if>
+            <if test="liveAddressNow != null">live_address_now = #{liveAddressNow},</if>
+            <if test="birthDay != null">birth_day = #{birthDay},</if>
+            <if test="contactPhone != null">contact_phone = #{contactPhone},</if>
+            <if test="contactEmail != null">contact_email = #{contactEmail},</if>
+            <if test="jobIntention != null">job_intention = #{jobIntention},</if>
+            <if test="headPic != null">head_pic = #{headPic},</if>
+            <if test="universityName != null">university_name = #{universityName},</if>
+            <if test="universityStudyTime != null">university_study_time = #{universityStudyTime},</if>
+            <if test="unSpecializedSubject != null">un_specialized_subject = #{unSpecializedSubject},</if>
+            <if test="unMainCoursesStudy != null">un_main_courses_study = #{unMainCoursesStudy},</if>
+            <if test="selfEvaluation != null">self_evaluation = #{selfEvaluation},</if>
+            <if test="masterLanguage != null">master_language = #{masterLanguage},</if>
+            <if test="professionSkill != null">profession_skill = #{professionSkill},</if>
+            <if test="officeSkill != null">office_skill = #{officeSkill},</if>
+            <if test="education != null">education = #{education},</if>
+            <if test="nation != null">nation = #{nation},</if>
+            <if test="height != null">height = #{height},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePersonalResumeById" parameterType="Long">
+        delete from personal_resume where id = #{id}
+    </delete>
+
+    <delete id="deletePersonalResumeByIds" parameterType="String">
+        delete from personal_resume where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

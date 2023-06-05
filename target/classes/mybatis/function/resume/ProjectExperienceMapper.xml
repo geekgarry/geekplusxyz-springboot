@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maike.webapp.function.mapper.ProjectExperienceMapper">
+
+    <resultMap type="ProjectExperience" id="ProjectExperienceResult">
+        <result property="id"    column="id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="projectTime"    column="project_time"    />
+        <result property="projectContent"    column="project_content"    />
+        <result property="usingTechnology"    column="using_technology"    />
+        <result property="resumeId"    column="resume_id"    />
+        <result property="priorityId" column="priority_id" />
+    </resultMap>
+
+    <sql id="selectProjectExperienceVo">
+        select id, project_name, project_time, project_content, using_technology, resume_id, priority_id from project_experience
+    </sql>
+
+    <select id="selectProjectExperienceList" parameterType="ProjectExperience" resultMap="ProjectExperienceResult">
+        <include refid="selectProjectExperienceVo"/>
+        <where>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="projectTime != null  and projectTime != ''"> and project_time = #{projectTime}</if>
+            <if test="projectContent != null  and projectContent != ''"> and project_content = #{projectContent}</if>
+            <if test="usingTechnology != null  and usingTechnology != ''"> and using_technology = #{usingTechnology}</if>
+            <if test="resumeId != null "> and resume_id = #{resumeId}</if>
+            <if test="priorityId != null "> and priority_id = #{priorityId}</if>
+        </where>
+         order by priority_id desc
+    </select>
+
+    <select id="selectProjectExperienceById" parameterType="Long" resultMap="ProjectExperienceResult">
+        <include refid="selectProjectExperienceVo"/>
+         where id = #{id} order by priority_id desc
+    </select>
+
+    <insert id="insertProjectExperience" parameterType="ProjectExperience" useGeneratedKeys="true" keyProperty="id">
+        insert into project_experience
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectName != null">project_name,</if>
+            <if test="projectTime != null">project_time,</if>
+            <if test="projectContent != null">project_content,</if>
+            <if test="usingTechnology != null">using_technology,</if>
+            <if test="resumeId != null">resume_id,</if>
+            <if test="priorityId != null">priority_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectName != null">#{projectName},</if>
+            <if test="projectTime != null">#{projectTime},</if>
+            <if test="projectContent != null">#{projectContent},</if>
+            <if test="usingTechnology != null">#{usingTechnology},</if>
+            <if test="resumeId != null">#{resumeId},</if>
+            <if test="priorityId != null">#{priorityId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProjectExperience" parameterType="ProjectExperience">
+        update project_experience
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="projectTime != null">project_time = #{projectTime},</if>
+            <if test="projectContent != null">project_content = #{projectContent},</if>
+            <if test="usingTechnology != null">using_technology = #{usingTechnology},</if>
+            <if test="resumeId != null">resume_id = #{resumeId},</if>
+            <if test="priorityId != null">priority_id = #{priorityId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProjectExperienceById" parameterType="Long">
+        delete from project_experience where id = #{id}
+    </delete>
+
+    <delete id="deleteProjectExperienceByIds" parameterType="String">
+        delete from project_experience where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

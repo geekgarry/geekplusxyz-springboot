@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maike.webapp.function.mapper.PersonalTechnologyMapper">
+
+    <resultMap type="PersonalTechnology" id="PersonalTechnologyResult">
+        <result property="id"    column="id"    />
+        <result property="technologyName"    column="technology_name"    />
+        <result property="technologyScore"    column="technology_score"    />
+        <result property="resumeId"    column="resume_id"    />
+    </resultMap>
+
+    <sql id="selectPersonalTechnologyVo">
+        select id, technology_name, technology_score, resume_id from personal_technology
+    </sql>
+
+    <select id="selectPersonalTechnologyList" parameterType="PersonalTechnology" resultMap="PersonalTechnologyResult">
+        <include refid="selectPersonalTechnologyVo"/>
+        <where>
+            <if test="technologyName != null  and technologyName != ''"> and technology_name like concat('%', #{technologyName}, '%')</if>
+            <if test="technologyScore != null "> and technology_score = #{technologyScore}</if>
+            <if test="resumeId != null "> and resume_id = #{resumeId}</if>
+        </where>
+    </select>
+
+    <select id="selectPersonalTechnologyById" parameterType="Long" resultMap="PersonalTechnologyResult">
+        <include refid="selectPersonalTechnologyVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPersonalTechnology" parameterType="PersonalTechnology" useGeneratedKeys="true" keyProperty="id">
+        insert into personal_technology
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="technologyName != null">technology_name,</if>
+            <if test="technologyScore != null">technology_score,</if>
+            <if test="resumeId != null">resume_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="technologyName != null">#{technologyName},</if>
+            <if test="technologyScore != null">#{technologyScore},</if>
+            <if test="resumeId != null">#{resumeId},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePersonalTechnology" parameterType="PersonalTechnology">
+        update personal_technology
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="technologyName != null">technology_name = #{technologyName},</if>
+            <if test="technologyScore != null">technology_score = #{technologyScore},</if>
+            <if test="resumeId != null">resume_id = #{resumeId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePersonalTechnologyById" parameterType="Long">
+        delete from personal_technology where id = #{id}
+    </delete>
+
+    <delete id="deletePersonalTechnologyByIds" parameterType="String">
+        delete from personal_technology where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

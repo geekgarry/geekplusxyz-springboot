@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maike.webapp.function.mapper.ResumeWorkExperienceMapper">
+
+    <resultMap type="ResumeWorkExperience" id="ResumeWorkExperienceResult">
+        <result property="id"    column="id"    />
+        <result property="workTime"    column="work_time"    />
+        <result property="workCompany"    column="work_company"    />
+        <result property="workPosition"    column="work_position"    />
+        <result property="workIntroduce"    column="work_introduce"    />
+        <result property="workType"    column="work_type"    />
+        <result property="resumeId"    column="resume_id"    />
+        <result property="priorityId" column="priority_id" />
+        <result property="workVisible" column="work_visible" />
+    </resultMap>
+
+    <sql id="selectResumeWorkExperienceVo">
+        select id, work_time, work_company, work_position, work_introduce, work_type, resume_id, priority_id, work_visible from resume_work_experience
+    </sql>
+
+    <select id="selectResumeWorkExperienceList" parameterType="ResumeWorkExperience" resultMap="ResumeWorkExperienceResult">
+        <include refid="selectResumeWorkExperienceVo"/>
+        <where>
+            <if test="workTime != null  and workTime != ''"> and work_time = #{workTime}</if>
+            <if test="workCompany != null  and workCompany != ''"> and work_company = #{workCompany}</if>
+            <if test="workPosition != null  and workPosition != ''"> and work_position = #{workPosition}</if>
+            <if test="workIntroduce != null  and workIntroduce != ''"> and work_introduce = #{workIntroduce}</if>
+            <if test="workType != null "> and work_type = #{workType}</if>
+            <if test="resumeId != null "> and resume_id = #{resumeId}</if>
+            <if test="priorityId != null "> and priority_id = #{priorityId}</if>
+        </where>
+         order by priority_id desc
+    </select>
+
+    <select id="selectResumeWorkExperienceById" parameterType="Long" resultMap="ResumeWorkExperienceResult">
+        <include refid="selectResumeWorkExperienceVo"/>
+         where id = #{id}
+    </select>
+
+    <insert id="insertResumeWorkExperience" parameterType="ResumeWorkExperience" useGeneratedKeys="true" keyProperty="id">
+        insert into resume_work_experience
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workTime != null">work_time,</if>
+            <if test="workCompany != null">work_company,</if>
+            <if test="workPosition != null">work_position,</if>
+            <if test="workIntroduce != null">work_introduce,</if>
+            <if test="workType != null">work_type,</if>
+            <if test="resumeId != null">resume_id,</if>
+            <if test="priorityId != null">priority_id,</if>
+            <if test="workVisible != null">priority_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workTime != null">#{workTime},</if>
+            <if test="workCompany != null">#{workCompany},</if>
+            <if test="workPosition != null">#{workPosition},</if>
+            <if test="workIntroduce != null">#{workIntroduce},</if>
+            <if test="workType != null">#{workType},</if>
+            <if test="resumeId != null">#{resumeId},</if>
+            <if test="priorityId != null">#{priorityId},</if>
+            <if test="workVisible != null">1,</if>
+         </trim>
+    </insert>
+
+    <update id="updateResumeWorkExperience" parameterType="ResumeWorkExperience">
+        update resume_work_experience
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workTime != null">work_time = #{workTime},</if>
+            <if test="workCompany != null">work_company = #{workCompany},</if>
+            <if test="workPosition != null">work_position = #{workPosition},</if>
+            <if test="workIntroduce != null">work_introduce = #{workIntroduce},</if>
+            <if test="workType != null">work_type = #{workType},</if>
+            <if test="resumeId != null">resume_id = #{resumeId},</if>
+            <if test="priorityId != null">priority_id = #{priorityId},</if>
+            <if test="workVisible != null">work_visible = #{workVisible},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteResumeWorkExperienceById" parameterType="Long">
+        delete from resume_work_experience where id = #{id}
+    </delete>
+
+    <delete id="deleteResumeWorkExperienceByIds" parameterType="String">
+        delete from resume_work_experience where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

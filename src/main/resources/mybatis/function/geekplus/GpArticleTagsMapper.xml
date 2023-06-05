@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maike.webapp.function.mapper.GpArticleTagsMapper">
+
+    <resultMap type="GpArticleTags" id="GpArticleTagsResult">
+        <result property="id"    column="id"    />
+        <result property="tagName"    column="tag_name"    />
+        <result property="tagInfo"    column="tag_info"    />
+        <result property="articleCount" column="article_count" />
+    </resultMap>
+
+    <resultMap type="GpArticleMapTag" id="GpArticleMapTagResult">
+        <result property="aticleId"    column="aticle_id"    />
+        <result property="articleTag"    column="article_tag"    />
+    </resultMap>
+
+    <sql id="selectGpArticleTagsVo">
+        select id, tag_name, tag_info from gp_article_tags
+    </sql>
+
+    <select id="selectGpArticleTagsList" parameterType="GpArticleTags" resultMap="GpArticleTagsResult">
+        <include refid="selectGpArticleTagsVo"/>
+        <where>
+            <if test="tagName != null  and tagName != ''"> and tag_name like concat('%', #{tagName}, '%')</if>
+            <if test="tagInfo != null  and tagInfo != ''"> and tag_info = #{tagInfo}</if>
+        </where>
+    </select>
+
+    <select id="selectGpArticleTagsById" parameterType="Long" resultMap="GpArticleTagsResult">
+        <include refid="selectGpArticleTagsVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertGpArticleTags" parameterType="GpArticleTags" useGeneratedKeys="true" keyProperty="id">
+        insert into gp_article_tags
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="tagName != null">tag_name,</if>
+            <if test="tagInfo != null">tag_info,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="tagName != null">#{tagName},</if>
+            <if test="tagInfo != null">#{tagInfo},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGpArticleTags" parameterType="GpArticleTags">
+        update gp_article_tags
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tagName != null">tag_name = #{tagName},</if>
+            <if test="tagInfo != null">tag_info = #{tagInfo},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGpArticleTagsById" parameterType="Long">
+        delete from gp_article_tags where id = #{id}
+    </delete>
+
+    <delete id="deleteGpArticleTagsByIds" parameterType="String">
+        delete from gp_article_tags where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--    标签云，第二种子查询方式，count计算article_id的数量,递减-->
+    <select id="selectTagArticleCount2">
+        select (select count(*) from gp_article_map_tag gamt inner join gp_articles ga on ga.id=gamt.aticle_id where ga.is_display=1 and gamt.article_tag=gat.id) as article_count, gat.tag_name, gat.tag_info
+         from gp_article_tags gat order by article_count desc
+    </select>
+
+<!--    标签云，查询标签所属的文章数量,通过文章标签关联表，count计算article_id的数量,递减-->
+    <select id="selectTagArticleCount" resultMap="GpArticleTagsResult" >
+        select count(gamt.aticle_id) as article_count, gat.id, gat.tag_name, gat.tag_info from gp_article_tags gat
+         left join gp_article_map_tag gamt on gat.id=gamt.article_tag inner join gp_articles ga on ga.id=gamt.aticle_id and ga.is_display=1 GROUP BY gat.id order by article_count desc
+    </select>
+
+<!--    通过文章ID查询所属标签-->
+    <select id="selectTagByArticleId" resultMap="GpArticleTagsResult">
+        select gat.id, gat.tag_name, gat.tag_info from gp_article_tags gat left join gp_article_map_tag gamt
+        on gat.id=gamt.article_tag where gamt.aticle_id=#{articleId}
+    </select>
+
+<!--    目前是单条数据插入，也可以用<foreach>动态标签实现循环插入-->
+    <insert id="insertGpArticleMapTag" parameterType="HashMap">
+        insert into gp_article_map_tag
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="aticleId != null">aticle_id,</if>
+            <if test="articleTag != null">article_tag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="aticleId != null">#{aticleId},</if>
+            <if test="articleTag != null">#{articleTag},</if>
+        </trim>
+    </insert>
+
+    <select id="selectGpArticleMapTagList" parameterType="HashMap" resultMap="GpArticleMapTagResult">
+        select aticle_id, article_tag from gp_article_map_tag
+        <where>
+            <if test="aticleId != null "> and aticle_id = #{aticleId}</if>
+            <if test="articleTag != null "> and article_tag = #{articleTag}</if>
+        </where>
+    </select>
+
+    <delete id="deleteGpArticleMapTagByIdTag" parameterType="map">
+        delete from gp_article_map_tag
+        <where>
+             <if test="aticleId != null ">and aticle_id =#{aticleId}</if>
+             <if test="articleTag != null "> and article_tag = #{articleTag}</if>
+        </where>
+    </delete>
+
+</mapper>
