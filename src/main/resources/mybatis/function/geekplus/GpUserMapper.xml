@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maike.webapp.function.mapper.GpUserMapper">
+    <resultMap id="BaseResultMap" type="com.maike.webapp.function.domain.GpUser">
+            <result property="userId" column="user_id" jdbcType="INTEGER" />
+            <result property="deptId" column="dept_id" jdbcType="INTEGER" />
+            <result property="userName" column="user_name" jdbcType="VARCHAR" />
+            <result property="nickName" column="nick_name" jdbcType="VARCHAR" />
+            <result property="userType" column="user_type" jdbcType="VARCHAR" />
+            <result property="email" column="email" jdbcType="VARCHAR" />
+            <result property="phonenumber" column="phonenumber" jdbcType="VARCHAR" />
+            <result property="sex" column="sex" jdbcType="CHAR" />
+            <result property="avatar" column="avatar" jdbcType="VARCHAR" />
+            <result property="password" column="password" jdbcType="VARCHAR" />
+            <result property="status" column="status" jdbcType="CHAR" />
+            <result property="delFlag" column="del_flag" jdbcType="CHAR" />
+            <result property="loginIp" column="login_ip" jdbcType="VARCHAR" />
+            <result property="loginDate" column="login_date" jdbcType="TIMESTAMP" />
+            <result property="createBy" column="create_by" jdbcType="VARCHAR" />
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP" />
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR" />
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP" />
+            <result property="remark" column="remark" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <!--用户信息表-->
+    <!--基础查询语句-->
+    <sql id="baseSelectVo">
+        select
+        user_id,dept_id,user_name,nick_name,user_type,email,phonenumber,sex,avatar,password,status,del_flag,login_ip,login_date,create_by,create_time,update_by,update_time,remark
+         from gp_user
+    </sql>
+
+    <!--基础查询语句2,用作联合查询使用-->
+    <sql id="selectGpUserVo">
+        select
+            gu.user_id,gu.dept_id,gu.user_name,gu.nick_name,gu.user_type,gu.email,gu.phonenumber,gu.sex,gu.avatar,gu.password,gu.status,gu.del_flag,gu.login_ip,gu.login_date,gu.create_by,gu.create_time,gu.update_by,gu.update_time,gu.remark
+         from gp_user gu
+    </sql>
+
+    <!--数据查询操作SQL(非联合查询)-->
+    <select id="selectGpUserList" parameterType="GpUser" resultMap="BaseResultMap">
+        <include refid="baseSelectVo"/>
+        <where>
+                    <if test="userId !=null">
+                        AND user_id = #{userId,jdbcType=Long}
+                    </if>
+                    <if test="deptId !=null">
+                        AND dept_id = #{deptId,jdbcType=Long}
+                    </if>
+                    <if test="userName !=null">
+                        AND user_name = #{userName,jdbcType=String}
+                    </if>
+                    <if test="nickName !=null">
+                        AND nick_name = #{nickName,jdbcType=String}
+                    </if>
+                    <if test="userType !=null">
+                        AND user_type = #{userType,jdbcType=String}
+                    </if>
+                    <if test="email !=null">
+                        AND email = #{email,jdbcType=String}
+                    </if>
+                    <if test="phonenumber !=null">
+                        AND phonenumber = #{phonenumber,jdbcType=String}
+                    </if>
+                    <if test="sex !=null">
+                        AND sex = #{sex,jdbcType=String}
+                    </if>
+                    <if test="avatar !=null">
+                        AND avatar = #{avatar,jdbcType=String}
+                    </if>
+                    <if test="password !=null">
+                        AND password = #{password,jdbcType=String}
+                    </if>
+                    <if test="status !=null">
+                        AND status = #{status,jdbcType=String}
+                    </if>
+                    <if test="delFlag !=null">
+                        AND del_flag = #{delFlag,jdbcType=String}
+                    </if>
+                    <if test="loginIp !=null">
+                        AND login_ip = #{loginIp,jdbcType=String}
+                    </if>
+                    <if test="loginDate !=null">
+                        AND login_date = #{loginDate,jdbcType=Date}
+                    </if>
+                    <if test="createBy !=null">
+                        AND create_by = #{createBy,jdbcType=String}
+                    </if>
+                    <if test="createTime !=null">
+                        AND create_time = #{createTime,jdbcType=Date}
+                    </if>
+                    <if test="updateBy !=null">
+                        AND update_by = #{updateBy,jdbcType=String}
+                    </if>
+                    <if test="updateTime !=null">
+                        AND update_time = #{updateTime,jdbcType=Date}
+                    </if>
+                    <if test="remark !=null">
+                        AND remark = #{remark,jdbcType=String}
+                    </if>
+        </where>
+    </select>
+
+    <!--数据联合查询操作SQL(联合查询)-->
+    <select id="selectUnionGpUserList" parameterType="GpUser" resultMap="BaseResultMap">
+        <include refid="selectGpUserVo"/>
+        <where>
+                    <if test="userId !=null">
+                        AND gu.user_id = #{userId,jdbcType=Long}
+                    </if>
+                    <if test="deptId !=null">
+                        AND gu.dept_id = #{deptId,jdbcType=Long}
+                    </if>
+                    <if test="userName !=null">
+                        AND gu.user_name = #{userName,jdbcType=String}
+                    </if>
+                    <if test="nickName !=null">
+                        AND gu.nick_name = #{nickName,jdbcType=String}
+                    </if>
+                    <if test="userType !=null">
+                        AND gu.user_type = #{userType,jdbcType=String}
+                    </if>
+                    <if test="email !=null">
+                        AND gu.email = #{email,jdbcType=String}
+                    </if>
+                    <if test="phonenumber !=null">
+                        AND gu.phonenumber = #{phonenumber,jdbcType=String}
+                    </if>
+                    <if test="sex !=null">
+                        AND gu.sex = #{sex,jdbcType=String}
+                    </if>
+                    <if test="avatar !=null">
+                        AND gu.avatar = #{avatar,jdbcType=String}
+                    </if>
+                    <if test="password !=null">
+                        AND gu.password = #{password,jdbcType=String}
+                    </if>
+                    <if test="status !=null">
+                        AND gu.status = #{status,jdbcType=String}
+                    </if>
+                    <if test="delFlag !=null">
+                        AND gu.del_flag = #{delFlag,jdbcType=String}
+                    </if>
+                    <if test="loginIp !=null">
+                        AND gu.login_ip = #{loginIp,jdbcType=String}
+                    </if>
+                    <if test="loginDate !=null">
+                        AND gu.login_date = #{loginDate,jdbcType=Date}
+                    </if>
+                    <if test="createBy !=null">
+                        AND gu.create_by = #{createBy,jdbcType=String}
+                    </if>
+                    <if test="createTime !=null">
+                        AND gu.create_time = #{createTime,jdbcType=Date}
+                    </if>
+                    <if test="updateBy !=null">
+                        AND gu.update_by = #{updateBy,jdbcType=String}
+                    </if>
+                    <if test="updateTime !=null">
+                        AND gu.update_time = #{updateTime,jdbcType=Date}
+                    </if>
+                    <if test="remark !=null">
+                        AND gu.remark = #{remark,jdbcType=String}
+                    </if>
+        </where>
+    </select>
+
+    <!--单条数据或详情查询操作SQL-->
+    <select id="selectGpUserById" parameterType="Long" resultMap="BaseResultMap">
+        <include refid="baseSelectVo"/>
+        where
+                user_id = #{userId}
+    </select>
+
+    <!--单条数据或详情查询操作SQL-->
+    <select id="selectGpUserByGpUser" parameterType="GpUser" resultMap="BaseResultMap">
+        <include refid="baseSelectVo"/>
+        <where>
+            <if test="email != null  and email != ''">email = #{email}</if>
+            <if test="userName != null  and userName != ''">user_name = #{userName}</if>
+            <if test="password != null  and password != ''">password = #{password}</if>
+        </where>
+    </select>
+
+    <!--添加操作SQL-->
+    <insert id="insertGpUser" parameterType="GpUser"  useGeneratedKeys="true" keyProperty="userId">
+        insert into gp_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                        <if test="deptId != null ">dept_id,</if>
+                        <if test="userName != null  and userName != ''">user_name,</if>
+                        <if test="nickName != null  and nickName != ''">nick_name,</if>
+                        <if test="userType != null  and userType != ''">user_type,</if>
+                        <if test="email != null  and email != ''">email,</if>
+                        <if test="phonenumber != null  and phonenumber != ''">phonenumber,</if>
+                        <if test="sex != null  and sex != ''">sex,</if>
+                        <if test="avatar != null  and avatar != ''">avatar,</if>
+                        <if test="password != null  and password != ''">password,</if>
+                        <if test="status != null  and status != ''">status,</if>
+                        <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+                        <if test="loginIp != null  and loginIp != ''">login_ip,</if>
+                        <if test="loginDate != null ">login_date,</if>
+                        <if test="createBy != null  and createBy != ''">create_by,</if>
+                        <if test="createTime != null ">create_time,</if>
+                        <if test="updateBy != null  and updateBy != ''">update_by,</if>
+                        <if test="updateTime != null ">update_time,</if>
+                        <if test="remark != null  and remark != ''">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                        <if test="deptId != null ">#{deptId},</if>
+                        <if test="userName != null  and userName != ''">#{userName},</if>
+                        <if test="nickName != null  and nickName != ''">#{nickName},</if>
+                        <if test="userType != null  and userType != ''">#{userType},</if>
+                        <if test="email != null  and email != ''">#{email},</if>
+                        <if test="phonenumber != null  and phonenumber != ''">#{phonenumber},</if>
+                        <if test="sex != null  and sex != ''">#{sex},</if>
+                        <if test="avatar != null  and avatar != ''">#{avatar},</if>
+                        <if test="password != null  and password != ''">#{password},</if>
+                        <if test="status != null  and status != ''">#{status},</if>
+                        <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+                        <if test="loginIp != null  and loginIp != ''">#{loginIp},</if>
+                        <if test="loginDate != null ">#{loginDate},</if>
+                        <if test="createBy != null  and createBy != ''">#{createBy},</if>
+                        <if test="createTime != null ">#{createTime},</if>
+                        <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+                        <if test="updateTime != null ">#{updateTime},</if>
+                        <if test="remark != null  and remark != ''">#{remark},</if>
+        </trim>
+    </insert>
+
+    <!--批量添加操作SQL-->
+    <insert id="batchInsertGpUserList" parameterType="java.util.List">
+        insert into gp_user
+        (
+         dept_id,user_name,nick_name,user_type,email,phonenumber,sex,avatar,password,status,del_flag,login_ip,login_date,create_by,create_time,update_by,update_time,remark
+        )
+         values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+         #{item.deptId},#{item.userName},#{item.nickName},#{item.userType},#{item.email},#{item.phonenumber},#{item.sex},#{item.avatar},#{item.password},#{item.status},#{item.delFlag},#{item.loginIp},#{item.loginDate},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark}
+        )
+        </foreach>
+    </insert>
+
+    <!--删除操作SQL-->
+    <delete id="deleteGpUserById" parameterType="Long">
+        delete FROM gp_user where user_id = #{userId}
+    </delete>
+
+    <!--逻辑删除-->
+    <delete id="deleteGpUserById2" parameterType="Long">
+        update gp_user set del_flag='2' where user_id = #{userId}
+    </delete>
+
+    <!--删除操作SQL-->
+    <delete id="deleteGpUserByIds" parameterType="Long">
+        delete FROM gp_user where user_id in
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+             #{userId}
+        </foreach>
+    </delete>
+
+    <!--逻辑批量删除-->
+    <delete id="deleteGpUserByIds2" parameterType="Long">
+        update gp_user set del_flag='2' where user_id in
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+
+    <!--更新操作SQL-->
+    <update id="updateGpUser" parameterType="GpUser">
+        update gp_user
+        <trim prefix="SET" suffixOverrides=",">
+                    <if test="deptId != null ">dept_id = #{deptId},</if>
+                    <if test="userName != null  and userName != ''">user_name = #{userName},</if>
+                    <if test="nickName != null  and nickName != ''">nick_name = #{nickName},</if>
+                    <if test="userType != null  and userType != ''">user_type = #{userType},</if>
+                    <if test="email != null  and email != ''">email = #{email},</if>
+                    <if test="phonenumber != null  and phonenumber != ''">phonenumber = #{phonenumber},</if>
+                    <if test="sex != null  and sex != ''">sex = #{sex},</if>
+                    <if test="avatar != null  and avatar != ''">avatar = #{avatar},</if>
+                    <if test="password != null  and password != ''">password = #{password},</if>
+                    <if test="status != null  and status != ''">status = #{status},</if>
+                    <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+                    <if test="loginIp != null  and loginIp != ''">login_ip = #{loginIp},</if>
+                    <if test="loginDate != null ">login_date = #{loginDate},</if>
+                    <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+                    <if test="createTime != null ">create_time = #{createTime},</if>
+                    <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+                    <if test="updateTime != null ">update_time = #{updateTime},</if>
+                    <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+         where user_id = #{userId}
+    </update>
+
+    <!--批量更新某个字段-->
+    <update id="batchUpdateGpUserList" >
+        update gp_user set
+            user_id='',dept_id='',user_name='',nick_name='',user_type='',email='',phonenumber='',sex='',avatar='',password='',status='',del_flag='',login_ip='',login_date='',create_by='',create_time='',update_by='',update_time='',remark=''
+         where user_id in
+        <foreach collection="array" item="item"  open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+</mapper>
