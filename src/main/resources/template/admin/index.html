@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>首页-极客普拉斯</title>
+    <link rel="stylesheet" type="text/css" href="hui/h-ui/css/H-ui.min.css">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="hui/lib/html5shi.js"></script>
+    <script type="text/javascript" src="hui/lib/respond.min.js"></script>
+    <script type="text/javascript" src="hui/lib/PIE_IE678.js"></script>
+    <![endif]-->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="hui/Lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>
+        DD_belatedPNG.fix('.pngfix,.icon');
+    </script>
+    <![endif]-->
+</head>
+
+<body ontouchstart>
+<div class="hui-side-box">
+    <ul class="hui-nav pt-20">
+        <li><a href="#">登录/注册</a>
+        </li>
+        <li><a href="#">技术检索</a>
+        </li>
+        <li><a href="#">关于我们</a>
+        </li>
+        <li><a href="#">联系我们</a>
+        </li>
+        <li><a href="#">隐私保护</a>
+        </li>
+        <li><a href="#">免责声明</a>
+        </li>
+        <li><a href="#">支付方式</a>
+        </li>
+    </ul>
+</div>
+<div class="hui-container-wrapper">
+    <div class="hui-container-bg"></div>
+    <header class="hui-nav-wrapper">
+        <div class="hui-nav-bar hui-nav-black hui-nav-fixed-top">
+            <div class="hui-layout-content clearfix"> <a class="hui-logo hidden-xs" href="http://www.h-ui.net/aboutHui.shtml">H-ui前端框架</a>
+                <a class="hui-logo visible-xs" href="http://www.h-ui.net/aboutHui.shtml">H-ui</a>
+                <span class="hui-logo hui-slogan hidden-xs">简单 · 免费 · 适合中国网站</span>
+                <a aria-hidden="false"
+                   class="hui-nav-toggle hui-iconfont visible-xs JS-nav-toggle" href="javascript:;"></a>
+
+                <nav class="hui-nav hui-nav-collapse" style="float: left; display: flex; flex: 1 1 0%;">
+                    <ul class="clearfix">
+                        <li class="current"><a href="http://www.h-ui.net/" target="_blank">首页</a>
+                        </li>
+                        <li><a href="http://www.h-ui.net/Hui-overview.shtml" target="_blank">核心</a>
+                        </li>
+                        <li><a href="http://www.h-ui.net/lib/jQuery.cookie.js.shtml" target="_blank">脚本</a>
+                        </li>
+                        <li class="hui-dropdown hui-dropdown-hover"><a href="javascript:;" class="hui-dropdown-link">工具 <i class="hui-iconfont"></i></a>
+                            <ul class="hui-menu hui-dropdown-menu radius box-shadow">
+                                <li class="hui-menu-item"><a href="http://www.h-ui.net/bug.shtml" target="_blank">Bug兼容性汇总</a>
+                                </li>
+                                <li class="hui-menu-item"><a href="http://www.h-ui.net/websafecolors.shtml" target="_blank">web安全色</a>
+                                </li>
+                                <li class="hui-menu-item"><a href="http://www.h-ui.net/hui-3.7-hui-iconfont.shtml" target="_blank">hui-iconfont</a>
+                                </li>
+                                <li class="hui-menu-item"><a href="javascript:;">web工具箱<i class="arrow hui-iconfont"></i></a>
+                                    <ul class="hui-menu">
+                                        <li class="hui-menu-item"><a href="http://www.h-ui.net/tools/jsformat.shtml" target="_blank">JS/HTML格式化工具</a>
+                                        </li>
+                                        <li class="hui-menu-item"><a href="http://www.h-ui.net/tools/HTMLtoJS.shtml" target="_blank">HTML/JS转换工具</a>
+                                        </li>
+                                        <li class="hui-menu-item"><a href="http://www.h-ui.net/tools/cssformat.shtml" target="_blank">CSS代码格式化工具</a>
+                                        </li>
+                                        <li class="hui-menu-item"><a href="http://www.h-ui.net/tools/daxiaoxie.shtml" target="_blank">字母大小写转换工具</a>
+                                        </li>
+                                        <li class="hui-menu-item"><a href="http://www.h-ui.net/tools/fantizhuanhuan.shtml" target="_blank">繁体字、火星文转换</a>
+                                        </li>
+                                        <li class="hui-menu-item"><a href="javascript:;">三级菜单<i class="arrow hui-iconfont"></i></a>
+                                            <ul class="hui-menu">
+                                                <li class="hui-menu-item"><a href="javascript:;">四级菜单</a>
+                                                </li>
+                                                <li class="hui-menu-item"><a href="javascript:;">四级菜单</a>
+                                                </li>
+                                                <li class="hui-menu-item"><a href="javascript:;">四级菜单</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="hui-menu-item"><a href="#">三级导航</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="hui-menu-item"><a href="#">二级导航</a>
+                                </li>
+                                <li class="hui-menu-item disabled"><a href="javascript:;">二级菜单</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="http://h-ui.net/aboutHui.shtml" target="_blank">联系我们</a>
+                        </li>
+                    </ul>
+                </nav>
+                <nav class="hui-nav hidden-xs" style="float: right">
+                    <ul class="clearfix">
+                        <li><a href="#" target="_blank">登录</a>
+                        </li>
+                        <li><a href="#" target="_blank">注册</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <aside class="Hui-aside" style="display: block;">
+        <input runat="server" id="divScrollValue" type="hidden" value="">
+        <div class="menu_dropdown bk_2">
+            <ul>
+                <li class="current"><a href="Hui-overview.shtml">&nbsp;&nbsp;&nbsp;&nbsp;概述</a></li>
+            </ul>
+            <dl id="menu_notes">
+                <dt class="">&nbsp;&nbsp;&nbsp;&nbsp;注释<i class="Hui-iconfont menu_dropdown-arrow"></i></dt>
+                <dd style="display: none;">
+                    <ul>
+                        <li><a href="Hui-notes-htmlStructure.shtml">Html书写规范</a></li>
+                        <li><a href="Hui-notes-css.shtml">CSS写作注意事项</a></li>
+                        <li><a href="Hui-notes-cnFont.shtml">中文字体css编码转换</a></li>
+                        <li><a href="Hui-notes-cssHack.shtml">CSS Hack</a></li>
+                        <li><a href="Hui-notes-keycode.shtml">键盘按钮keycode</a></li>
+                        <li><a href="Hui-notes-ARIA.shtml">ARIA属性值</a></li>
+                        <li><a href="Hui-notes-cssHame.shtml">css 命名规范</a></li>
+                        <li><a href="Hui-notes-htmlName.shtml">html命名规范</a></li>
+                        <li><a href="Hui-notes-fileName.shtml">文件夹命名规范</a></li>
+                        <li><a href="Hui-notes-ascii.shtml">ASCII码表</a></li>
+                        <li><a href="Hui-notes-regular.shtml">常用正则表达式</a></li>
+                        <li><a href="Hui-notes-csscursor.shtml">css中cursor(光标类型)</a></li>
+                        <li><a href="Hui-notes-EDM.shtml">EDM制作规范</a></li>
+                    </ul>
+                </dd>
+            </dl>
+            <ul>
+                <li><a href="Hui-notes-menu.shtml">&nbsp;&nbsp;&nbsp;&nbsp;结构目录</a></li>
+            </ul>
+            <ul>
+                <li><a href="Hui-1-cssReset.shtml">1. css reset</a></li>
+            </ul>
+            <dl id="menu_2">
+                <dt class="">2. 框架<i class="Hui-iconfont menu_dropdown-arrow"></i></dt>
+                <dd style="display: none;">
+                    <ul>
+                        <li><a href="Hui-2.1-gridSystem.shtml">2.1 响应式栅格系统</a></li>
+                        <li><a href="Hui-2.2-show&amp;hide.shtml">2.2 响应式隐藏显示</a></li>
+                    </ul>
+                </dd>
+            </dl>
+            <dl id="menu_3">
+                <dt class="">3. 基础<i class="Hui-iconfont menu_dropdown-arrow"></i></dt>
+                <dd style="display: none;">
+                    <ul>
+                        <li><a href="Hui-3.1-typography.shtml">3.1 排版</a></li>
+                        <li><a href="Hui-3.2-code.shtml">3.2 代码</a></li>
+                        <li><a href="Hui-3.3-table.shtml">3.3 表格</a></li>
+                        <li><a href="Hui-3.4-form.shtml">3.4 表单</a></li>
+                        <li><a href="Hui-3.5-button.shtml">3.5 按钮</a></li>
+                        <li><a href="Hui-3.6-images.shtml">3.6 图片</a></li>
+                        <li><a href="Hui-3.7-Hui-iconfont.shtml">3.7 图标</a></li>
+                        <li><a href="Hui-3.8-animation.shtml">3.8 动画</a></li>
+                    </ul>
+                </dd>
+            </dl>
+            <dl id="menu_4">
+                <dt class="">4. 组件<i class="Hui-iconfont menu_dropdown-arrow"></i></dt>
+                <dd style="display: none;">
+                    <ul>
+                        <li><a href="Hui-4.1-buttonGroups.shtml">4.1 按钮组</a></li>
+                        <li><a href="Hui-4.2-nav.shtml">4.2 导航 &amp; 翻页</a></li>
+                        <li><a href="Hui-4.3-dropDown.shtml">4.3 下拉菜单</a></li>
+                        <li><a href="Hui-4.4-slider.shtml">4.4 幻灯片</a></li>
+                        <li><a href="Hui-4.5-tab.shtml">4.5 选项卡</a></li>
+                        <li><a href="Hui-4.6-labelBadge.shtml">4.6 便签与标号</a></li>
+                        <li><a href="Hui-4.7-thumbnails.shtml"><del>4.7 缩略图</del></a></li>
+                        <li><a href="Hui-4.8-alert.shtml">4.8 警告</a></li>
+                        <li><a href="Hui-4.9-progress.shtml">4.9 进度条 loading</a></li>
+                        <li><a href="Hui-4.10-modal.shtml">4.10 对话框 弹出层</a></li>
+                        <li><a href="Hui-4.11-kefu.shtml">4.11 客服</a></li>
+                        <li><a href="Hui-4.12-toTop.shtml">4.12 返回顶部</a></li>
+                        <li><a href="Hui-4.13-share.shtml">4.13 分享</a></li>
+                        <li><a href="Hui-4.14-panel.shtml">4.14 面板</a></li>
+                        <li><a href="Hui-4.15-example.shtml">4.15 案例</a></li>
+                        <li><a href="Hui-4.16-rolling.shtml">4.16 滚动</a></li>
+                        <li><a href="Hui-4.17-search.shtml">4.17 搜索</a></li>
+                        <li><a href="Hui-4.18-ad.shtml">4.18 广告</a></li>
+                        <li><a href="Hui-4.19-tags.shtml">4.19 标签</a></li>
+                        <li><a href="Hui-4.20-fold.shtml">4.20 折叠</a></li>
+                        <li><a href="Hui-4.21-maskBar.shtml">4.21 遮罩条</a></li>
+                        <li><a href="Hui-4.22-comment.shtml">4.22 评论列表</a></li>
+                        <li><a href="Hui-4.23-footer.shtml">4.23 页脚</a></li>
+                        <li><a href="Hui-4.24-star.shtml">4.24 星星评价</a></li>
+                        <li><a href="Hui-4.25-tooltip.shtml">4.25 tooltip效果</a></li>
+                        <li><a href="Hui-4.26-popover.shtml">4.26 popover效果</a></li>
+                        <!--<li><a href="Hui-4.26-select-category.shtml">4.26 分类检索</a></li>-->
+                    </ul>
+                </dd>
+            </dl>
+            <dl id="menu_5">
+                <dt class="">5. 页面<i class="Hui-iconfont menu_dropdown-arrow"></i></dt>
+                <dd style="display: none;">
+                    <ul>
+                        <li><a href="404.shtml" target="_blank">5.1 404页面</a></li>
+                        <!--<li><a href="Hui-5.1-blog-list.shtml">5.2 博客列表页</a></li>
+                        <li><a href="Hui-5.2-blog-show.shtml">5.3 博客详情页</a></li>
+                        <li><a href="Hui-5.3-aboutus.shtml">5.4 关于我们页</a></li>
+                        <li><a href="Hui-5.4-help-list.shtml">5.5 帮助列表页</a></li>
+                        <li><a href="Hui-5.5-help-show.shtml">5.6 帮助详情页</a></li> -->
+                        <li>&nbsp;</li>
+                        <li>&nbsp;</li>
+                    </ul>
+                </dd>
+            </dl>
+        </div>
+    </aside>
+    <section class="Hui-article-box">
+        <nav class="breadcrumb"><i class="Hui-iconfont"></i> <a class="maincolor" href="/">首页</a>
+            <span class="c-999 en">&gt;</span>
+            <span class="c-666">概述</span>
+        </nav>
+        <div class="Hui-article">
+            <p th:text="${message}"></p>
+        </div>
+    </section>
+</div>
+</body>
+
+</html>

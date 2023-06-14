@@ -2,7 +2,7 @@ package com.maike.webapp.function.controller;
 
 import com.maike.common.annotation.Log;
 import com.maike.common.core.controller.BaseController;
-import com.maike.common.result.AjaxResult;
+import com.maike.common.result.Result;
 import com.maike.common.core.page.PageDataInfo;
 import com.maike.common.enums.BusinessType;
 import com.maike.webapp.function.domain.GpFriendlyLink;
@@ -56,9 +56,9 @@ public class GpFriendlyLinkController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('function:link:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    public Result getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(gpFriendlyLinkService.selectGpFriendlyLinkById(id));
+        return Result.success(gpFriendlyLinkService.selectGpFriendlyLinkById(id));
     }
 
     /**
@@ -67,7 +67,7 @@ public class GpFriendlyLinkController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:link:add')")
     @Log(title = "网站友情链接", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody GpFriendlyLink gpFriendlyLink)
+    public Result add(@RequestBody GpFriendlyLink gpFriendlyLink)
     {
         return toAjax(gpFriendlyLinkService.insertGpFriendlyLink(gpFriendlyLink));
     }
@@ -78,7 +78,7 @@ public class GpFriendlyLinkController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:link:edit')")
     @Log(title = "网站友情链接", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody GpFriendlyLink gpFriendlyLink)
+    public Result edit(@RequestBody GpFriendlyLink gpFriendlyLink)
     {
         return toAjax(gpFriendlyLinkService.updateGpFriendlyLink(gpFriendlyLink));
     }
@@ -89,7 +89,7 @@ public class GpFriendlyLinkController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:link:remove')")
     @Log(title = "网站友情链接", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Long[] ids)
+    public Result remove(@PathVariable Long[] ids)
     {
         return toAjax(gpFriendlyLinkService.deleteGpFriendlyLinkByIds(ids));
     }

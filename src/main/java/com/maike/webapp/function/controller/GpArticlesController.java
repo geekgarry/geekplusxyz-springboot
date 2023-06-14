@@ -5,7 +5,7 @@ import com.maike.common.config.MaikeConfig;
 import com.maike.common.constant.Constants;
 import com.maike.common.core.controller.BaseController;
 import com.maike.common.core.page.PageDataInfo;
-import com.maike.common.result.AjaxResult;
+import com.maike.common.result.Result;
 import com.maike.common.enums.BusinessType;
 import com.maike.common.utils.time.DateUtils;
 import com.maike.common.utils.file.FileUploadUtils;
@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import sun.jvm.hotspot.debugger.Page;
 
 import javax.annotation.Resource;
 import java.io.File;
@@ -77,9 +76,9 @@ public class GpArticlesController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('function:articles:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    public Result getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(gpArticlesService.selectGpArticlesById(id));
+        return Result.success(gpArticlesService.selectGpArticlesById(id));
     }
 
     /**
@@ -88,12 +87,12 @@ public class GpArticlesController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:articles:add')")
     @Log(title = "文章", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody GpArticles gpArticles)
+    public Result add(@RequestBody GpArticles gpArticles)
     {
-        AjaxResult ajaxResult=toAjax(gpArticlesService.insertGpArticles(gpArticles));
+        Result result =toAjax(gpArticlesService.insertGpArticles(gpArticles));
         //System.out.println("controller返回主键ID："+gpArticles.getId());
-        ajaxResult.put("articleId",gpArticles.getId());
-        return ajaxResult;
+        result.put("articleId",gpArticles.getId());
+        return result;
     }
 
     /**
@@ -102,7 +101,7 @@ public class GpArticlesController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:articles:edit')")
     @Log(title = "文章", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody GpArticles gpArticles)
+    public Result edit(@RequestBody GpArticles gpArticles)
     {
         return toAjax(gpArticlesService.updateGpArticles(gpArticles));
     }
@@ -113,7 +112,7 @@ public class GpArticlesController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:articles:remove')")
     @Log(title = "文章", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Long[] ids)
+    public Result remove(@PathVariable Long[] ids)
     {
         int rows=gpArticlesService.deleteGpArticlesByIds(ids);
         List<GpArticleTags> list=new ArrayList<>();
@@ -131,9 +130,9 @@ public class GpArticlesController extends BaseController
                 }
                 //map.put("articleId", id)
             }
-            return AjaxResult.success();
+            return Result.success();
         }else{
-            return AjaxResult.error();
+            return Result.error();
         }
         //return toAjax(rows);
     }
@@ -142,7 +141,7 @@ public class GpArticlesController extends BaseController
      * 通用上传文件请求
      */
     @PostMapping("/uploadFile")
-    public AjaxResult uploadFile(@RequestPart("file") MultipartFile file) throws Exception
+    public Result uploadFile(@RequestPart("file") MultipartFile file) throws Exception
     {
 //        if(!checkFormats(file.getOriginalFilename())){
 //            return AjaxResult.error("上传图片格式不是png,jpg或jpeg！");
@@ -172,14 +171,14 @@ public class GpArticlesController extends BaseController
             String resultFileName= Constants.RESOURCE_PREFIX+realFilePath+File.separator+fileName;
             String url = serverConfig.getUrl() + resultFileName;
             //log.info("用户请求URL信息："+serverConfig.getUrl());
-            AjaxResult ajax = AjaxResult.success();
+            Result ajax = Result.success();
             ajax.put("fileName", fileName);
             ajax.put("url", resultFileName);
             return ajax;
         }
         catch (Exception e)
         {
-            return AjaxResult.error(e.getMessage());
+            return Result.error(e.getMessage());
         }
     }
 
@@ -189,7 +188,7 @@ public class GpArticlesController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:articles:remove')")
     @Log(title = "删除文件夹里的图片文件", businessType = BusinessType.DELETE)
     @PostMapping("/deleteFileList")
-    public AjaxResult deleteFile(@RequestBody List<Map> filePaths)
+    public Result deleteFile(@RequestBody List<Map> filePaths)
     {
         int length=filePaths.size();
         for (int i = 0; i < filePaths.size(); i++) {
@@ -200,9 +199,9 @@ public class GpArticlesController extends BaseController
             length-=ds;
         }
         if(length==0){
-            return AjaxResult.success("删除文件成功！");
+            return Result.success("删除文件成功！");
         }else{
-            return AjaxResult.success("删除文件失败！");
+            return Result.success("删除文件失败！");
         }
     }
 
@@ -212,15 +211,15 @@ public class GpArticlesController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:articles:remove')")
     @Log(title = "删除文件夹里的图片文件", businessType = BusinessType.DELETE)
     @GetMapping("/deleteFile")
-    public AjaxResult deleteFile(String filePath)
+    public Result deleteFile(String filePath)
     {
         String profile=Constants.RESOURCE_PREFIX;//profile
         String allFilePath=MaikeConfig.getFilePath()+filePath.replace(profile,"");
         boolean flag=FileUtils.deleteFile(allFilePath);
         if(flag==true){
-            return AjaxResult.success("删除文件成功！");
+            return Result.success("删除文件成功！");
         }else{
-            return AjaxResult.success("删除文件失败！");
+            return Result.success("删除文件失败！");
         }
     }
 
@@ -233,12 +232,12 @@ public class GpArticlesController extends BaseController
       */
     @PreAuthorize("@ss.hasPermi('function:articles:list')")
     @GetMapping("/readFileList")
-    public AjaxResult readFileList(String folder) throws IOException {
+    public Result readFileList(String folder) throws IOException {
         if(folder==null) {
             folder = "article";
         }
         List<Map> mapList=FileUtils.readFileList(MaikeConfig.getFilePath()+File.separator +folder);
-        return AjaxResult.success(mapList);
+        return Result.success(mapList);
     }
 
     /**
@@ -246,13 +245,13 @@ public class GpArticlesController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('function:articles:list')")
     @GetMapping("/getImageList")
-    public AjaxResult listFileImage(String fileFolder)
+    public Result listFileImage(String fileFolder)
     {
         try{
             List<String> listImage= FileUtils.readFileImage(MaikeConfig.getFilePath(), File.separator + fileFolder);
-            return AjaxResult.success(listImage);
+            return Result.success(listImage);
         }catch(IOException e){
-            return AjaxResult.success(e.getMessage());
+            return Result.success(e.getMessage());
         }
     }
 }

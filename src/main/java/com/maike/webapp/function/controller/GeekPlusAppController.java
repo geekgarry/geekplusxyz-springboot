@@ -12,7 +12,7 @@ import com.maike.common.annotation.Log;
 import com.maike.common.config.MaikeConfig;
 import com.maike.common.constant.Constants;
 import com.maike.common.core.controller.BaseController;
-import com.maike.common.result.AjaxResult;
+import com.maike.common.result.Result;
 import com.maike.common.core.page.PageDataInfo;
 import com.maike.common.enums.BusinessType;
 import com.maike.common.utils.time.DateUtils;
@@ -70,10 +70,10 @@ public class GeekPlusAppController extends BaseController {
      */
     //@PreAuthorize("@ss.hasPermi('function:carousel:list')")
     @GetMapping("/getCarousel")
-    public AjaxResult getCarouselList()
+    public Result getCarouselList()
     {
         List<GpCarousel> list = gpCarouselService.selectGpCarouselListImage();
-        return AjaxResult.success(list);
+        return Result.success(list);
     }
 
     /**
@@ -84,9 +84,9 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @GetMapping("/displayFriendlyLink")
-    public AjaxResult displayFriendlyLink(){
+    public Result displayFriendlyLink(){
         List<GpFriendlyLink> list=gpFriendlyLinkService.displayGpFriendlyLink();
-        return AjaxResult.success(list);
+        return Result.success(list);
     }
 
     /**
@@ -97,12 +97,12 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @PostMapping("/userAppFriendlyLink")
-    public AjaxResult userAppFriendlyLink(@RequestBody GpFriendlyLink gpFriendlyLink){
+    public Result userAppFriendlyLink(@RequestBody GpFriendlyLink gpFriendlyLink){
         int size=gpFriendlyLinkService.insertGpFriendlyLink(gpFriendlyLink);
         if(size>0){
-            return AjaxResult.success();
+            return Result.success();
         }else{
-            return AjaxResult.error();
+            return Result.error();
         }
     }
 
@@ -114,12 +114,12 @@ public class GeekPlusAppController extends BaseController {
       * @Return {@link }
       */
     @PostMapping("/userCommentMessage")
-    public AjaxResult insertUserComment(@RequestBody GpUserComment gpUserComment){
+    public Result insertUserComment(@RequestBody GpUserComment gpUserComment){
         int size=gpUserCommentService.insertUserComment(gpUserComment);
         if(size>0){
-            return AjaxResult.success();
+            return Result.success();
         }else {
-            return AjaxResult.error();
+            return Result.error();
         }
     }
 
@@ -131,12 +131,12 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @PostMapping("/articleCommentMessage")
-    public AjaxResult insertArticleComment(@RequestBody GpUserComment gpUserComment){
+    public Result insertArticleComment(@RequestBody GpUserComment gpUserComment){
         int size=gpArticleCommentService.insertArticleComment(gpUserComment);
         if(size>0){
-            return AjaxResult.success();
+            return Result.success();
         }else {
-            return AjaxResult.error();
+            return Result.error();
         }
     }
 
@@ -191,9 +191,9 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @GetMapping("/getUserCommentCount")
-    public AjaxResult getUserCommentCount(){
+    public Result getUserCommentCount(){
         int count=gpUserCommentService.getUserCommentCount();
-        return AjaxResult.success(count);
+        return Result.success(count);
     }
 
     /**
@@ -204,9 +204,9 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @GetMapping("/getLatestArticleUserComment")
-    public AjaxResult getLatestArticleCommentCount(){
+    public Result getLatestArticleCommentCount(){
         List<GpUserComment> list=gpArticleCommentService.getLatestArticleComment();
-        return AjaxResult.success(list);
+        return Result.success(list);
     }
 
     /**
@@ -217,9 +217,9 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @GetMapping("/getHotWebUserComment")
-    public AjaxResult getHotUserCommentCount(){
+    public Result getHotUserCommentCount(){
         List<GpUserComment> list=gpUserCommentService.getHotWebUserComment();
-        return AjaxResult.success(list);
+        return Result.success(list);
     }
 
     /**
@@ -230,9 +230,9 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @GetMapping(value="/getGpWebTitleInfo")
-    public AjaxResult getGpWebTitleInfo(Integer id){
+    public Result getGpWebTitleInfo(Integer id){
         GpAboutWeb webInfo=gpAboutWebService.selectGpWebInfo(id);
-        return AjaxResult.success(webInfo);
+        return Result.success(webInfo);
     }
 
     /**
@@ -243,9 +243,9 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @GetMapping("/getAboutMyGpWeb/{id}")
-    public AjaxResult getAboutMyGpWeb(@PathVariable("id") Integer id){
+    public Result getAboutMyGpWeb(@PathVariable("id") Integer id){
         GpAboutWeb aboutWeb=gpAboutWebService.selectAboutGpWeb(id);
-        return AjaxResult.success(aboutWeb);
+        return Result.success(aboutWeb);
     }
 
     /**
@@ -256,12 +256,12 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @GetMapping("/getTenNewestArticle")
-    public AjaxResult getSixNewestArticle(GpArticles gpArticles){
+    public Result getSixNewestArticle(GpArticles gpArticles){
 //        if(gpArticles.getIsDisplay()==null||"".equals(gpArticles.getIsDisplay())){
 //            gpArticles.setIsDisplay("1");
 //        }
         List<GpArticles> list=gpArticlesService.selectGpArticlesListByCategoryLimitTen(gpArticles);
-        return AjaxResult.success(list);
+        return Result.success(list);
     }
 
     /**
@@ -272,9 +272,9 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @GetMapping("/getArticlesListByCategoryLimit")
-    public AjaxResult selectGpArticlesListByCategoryLimit(String pathName, Integer limitCount){
+    public Result selectGpArticlesListByCategoryLimit(String pathName, Integer limitCount){
         List<GpArticles> list=gpArticlesService.selectGpArticlesListByCategoryLimit(pathName,limitCount);
-        return AjaxResult.success(list);
+        return Result.success(list);
     }
 
     /**
@@ -285,15 +285,15 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @GetMapping("/getGpArticlesListByCategory")
-    public AjaxResult selectGpArticlesListByCategory(String pathName,Integer pageNum,Integer pageSize){
+    public Result selectGpArticlesListByCategory(String pathName, Integer pageNum, Integer pageSize){
         PageHelper.startPage(pageNum,pageSize);
         //startPage();
         List<GpArticles> list=gpArticlesService.selectGpArticlesListByCategory(pathName);
         PageInfo pageInfo=new PageInfo(list);
-        AjaxResult ajaxResult=AjaxResult.success();
-        ajaxResult.put("rows",list);
-        ajaxResult.put("total",pageInfo.getTotal());
-        return ajaxResult;
+        Result result = Result.success();
+        result.put("rows",list);
+        result.put("total",pageInfo.getTotal());
+        return result;
     }
 
     /**
@@ -304,15 +304,15 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @GetMapping("/selectGpArticlesListByKeyWords")
-    public AjaxResult selectGpArticlesListByKeyWords(String articleTitle,Integer pageNum,Integer pageSize){
+    public Result selectGpArticlesListByKeyWords(String articleTitle, Integer pageNum, Integer pageSize){
         PageHelper.startPage(pageNum,pageSize);
         //startPage();
         List<GpArticles> list=gpArticlesService.selectGpArticlesListByKeyWords(articleTitle);
         PageInfo pageInfo=new PageInfo(list);
-        AjaxResult ajaxResult=AjaxResult.success();
-        ajaxResult.put("rows",list);
-        ajaxResult.put("total",pageInfo.getTotal());
-        return ajaxResult;
+        Result result = Result.success();
+        result.put("rows",list);
+        result.put("total",pageInfo.getTotal());
+        return result;
     }
 
     /**
@@ -323,10 +323,10 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @GetMapping("/getFourPlusOneArticles")
-    public AjaxResult getOneRecommendArticle(String firstPathName,String secondPathName){
+    public Result getOneRecommendArticle(String firstPathName, String secondPathName){
         GpArticles list=gpArticlesService.selectOneArticleByCategory(firstPathName);
         List<GpArticles> fourList=gpArticlesService.selectFourArticleByCategory(secondPathName);
-        AjaxResult ajax = AjaxResult.success();
+        Result ajax = Result.success();
         ajax.put("one", list);
         ajax.put("four", fourList);
         return ajax;
@@ -341,9 +341,9 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @GetMapping("/getTenRecommendArticle")
-    public AjaxResult getTenRecommendArticle(GpArticles gpArticles){
+    public Result getTenRecommendArticle(GpArticles gpArticles){
         List<GpArticles> list=gpArticlesService.selectGpArticlesList(gpArticles);
-        return AjaxResult.success(list);
+        return Result.success(list);
     }
 
     /**
@@ -354,9 +354,9 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @GetMapping("/getFourRecommendArticle")
-    public AjaxResult getFourRecommendArticle(GpArticles gpArticles){
+    public Result getFourRecommendArticle(GpArticles gpArticles){
         List<GpArticles> list=gpArticlesService.selectGpArticlesList(gpArticles);
-        return AjaxResult.success(list);
+        return Result.success(list);
     }
 /***********************************************/
 
@@ -365,9 +365,9 @@ public class GeekPlusAppController extends BaseController {
      */
     //@Log(title = "文章类型目录", businessType = BusinessType.DELETE)
     @GetMapping("/listSubParentCategory")
-    public AjaxResult listSubParentCategory()
+    public Result listSubParentCategory()
     {
-        return AjaxResult.success(gpArticleCategoryService.selectSubParentCategory());
+        return Result.success(gpArticleCategoryService.selectSubParentCategory());
     }
 
     /**
@@ -375,11 +375,11 @@ public class GeekPlusAppController extends BaseController {
      */
     //@Log(title = "文章类型目录", businessType = BusinessType.DELETE)
     @GetMapping("/listSubCategory")
-    public AjaxResult listSubCategory()
+    public Result listSubCategory()
     {
         GpArticleCategory gpArticleCategory=new GpArticleCategory();
         gpArticleCategory.setMenuType("1");
-        return AjaxResult.success(gpArticleCategoryService.selectArticleCategoryList(gpArticleCategory));
+        return Result.success(gpArticleCategoryService.selectArticleCategoryList(gpArticleCategory));
     }
 
     /**
@@ -390,8 +390,8 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @GetMapping("/getTagArticleCount")
-    public AjaxResult selectTagArticleCount(){
-        return AjaxResult.success(gpArticleTagsService.selectTagArticleCount());
+    public Result selectTagArticleCount(){
+        return Result.success(gpArticleTagsService.selectTagArticleCount());
     }
 
     /**
@@ -402,14 +402,14 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @GetMapping("/selectArticleListForTag")
-    public AjaxResult selectTagDeArticle(String tagName,Long tagId,Integer pageNum,Integer pageSize){
+    public Result selectTagDeArticle(String tagName, Long tagId, Integer pageNum, Integer pageSize){
         PageHelper.startPage(pageNum,pageSize);
         List<GpArticles> list=gpArticlesService.selectTagDeArticle(tagName,tagId);
         PageInfo pageInfo=new PageInfo(list);
-        AjaxResult ajaxResult=AjaxResult.success();
-        ajaxResult.put("rows",list);
-        ajaxResult.put("total",pageInfo.getTotal());
-        return ajaxResult;
+        Result result = Result.success();
+        result.put("rows",list);
+        result.put("total",pageInfo.getTotal());
+        return result;
     }
 
     /**
@@ -420,8 +420,8 @@ public class GeekPlusAppController extends BaseController {
       * @Return {@link }
       */
     @RequestMapping(value = "/getGpNoticeNewOne",method = {RequestMethod.POST, RequestMethod.GET})
-    public AjaxResult selectGpNoticeNewOne(){
-        return AjaxResult.success(gpNoticeService.selectGpNoticeNewOne());
+    public Result selectGpNoticeNewOne(){
+        return Result.success(gpNoticeService.selectGpNoticeNewOne());
     }
 
     /**
@@ -432,8 +432,8 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @RequestMapping(value = "/getGpNoticeNewFive",method = {RequestMethod.POST, RequestMethod.GET})
-    public AjaxResult selectGpNoticeNewFive(){
-        return AjaxResult.success(gpNoticeService.selectGpNoticeNewFive());
+    public Result selectGpNoticeNewFive(){
+        return Result.success(gpNoticeService.selectGpNoticeNewFive());
     }
 
     /**
@@ -444,9 +444,9 @@ public class GeekPlusAppController extends BaseController {
       * @Return {@link }
       */
     @PostMapping("/userWriteGpArticles")
-    public AjaxResult userWriteGpArticles(@RequestBody GpArticles gpArticles){
+    public Result userWriteGpArticles(@RequestBody GpArticles gpArticles){
         int size=gpArticlesService.userWriteGpArticles(gpArticles);
-        return size > 0 ? AjaxResult.success() : AjaxResult.error();
+        return size > 0 ? Result.success() : Result.error();
     }
 
     /**
@@ -457,7 +457,7 @@ public class GeekPlusAppController extends BaseController {
       * @Return {@link }
       */
     @PostMapping(value = "/getArticle")
-    public AjaxResult getArticleDetail(@RequestBody HashMap<String,String> map)
+    public Result getArticleDetail(@RequestBody HashMap<String,String> map)
     {
         String isDisplay=map.get("isDisplay");
         if("".equals(map.get("isDisplay"))||map.get("isDisplay")==null) {
@@ -465,10 +465,10 @@ public class GeekPlusAppController extends BaseController {
         }
         Long id=Long.parseLong(map.get("id"));
         GpArticles gpArticles=gpArticlesService.selectGpArticlesByIdForUser(isDisplay,id);
-        AjaxResult ajaxResult=AjaxResult.success(gpArticles);
-        ajaxResult.put("prevRow",gpArticlesService.selectPrevGpArticle(null,id));
-        ajaxResult.put("nextRow",gpArticlesService.selectNextGpArticle(null,id));
-        return ajaxResult;
+        Result result = Result.success(gpArticles);
+        result.put("prevRow",gpArticlesService.selectPrevGpArticle(null,id));
+        result.put("nextRow",gpArticlesService.selectNextGpArticle(null,id));
+        return result;
     }
 
     /**
@@ -479,10 +479,10 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @GetMapping(value = "/getArticleIsDisplay/{id}")
-    public AjaxResult getArticleDetailIsDisplay(@PathVariable("id") Long id)
+    public Result getArticleDetailIsDisplay(@PathVariable("id") Long id)
     {
         //String isDisplay="1";
-        return AjaxResult.success(gpArticlesService.selectGpArticlesByIdForWeb(id));
+        return Result.success(gpArticlesService.selectGpArticlesByIdForWeb(id));
     }
 
     /**
@@ -516,9 +516,9 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @GetMapping(value = "/getArticleTagList")
-    public AjaxResult getArticleTagList(GpArticleTags gpArticleTags)
+    public Result getArticleTagList(GpArticleTags gpArticleTags)
     {
-        return AjaxResult.success(gpArticleTagsService.selectGpArticleTagsList(gpArticleTags));
+        return Result.success(gpArticleTagsService.selectGpArticleTagsList(gpArticleTags));
     }
 
     /**
@@ -529,7 +529,7 @@ public class GeekPlusAppController extends BaseController {
      * @Return {@link }
      */
     @PostMapping(value = "/insertArticleMapTag")
-    public AjaxResult insertGpArticleMapTag(@RequestBody Map<String,Object> map)
+    public Result insertGpArticleMapTag(@RequestBody Map<String,Object> map)
     {
         return toAjax(gpArticleTagsService.insertGpArticleMapTag(map));
         //return AjaxResult.success(gpArticleTagsService.insertGpArticleMapTag(map));
@@ -539,7 +539,7 @@ public class GeekPlusAppController extends BaseController {
      * 通用上传文件请求
      */
     @PostMapping("/uploadFile")
-    public AjaxResult uploadFile(@RequestPart("file") MultipartFile file) throws Exception
+    public Result uploadFile(@RequestPart("file") MultipartFile file) throws Exception
     {
 //        if(!checkFormats(file.getOriginalFilename())){
 //            return AjaxResult.error("上传图片格式不是png,jpg或jpeg！");
@@ -569,14 +569,14 @@ public class GeekPlusAppController extends BaseController {
             String resultFileName= Constants.RESOURCE_PREFIX+realFilePath+"/"+fileName;
             String url = serverConfig.getUrl() + resultFileName;
             log.info("用户请求URL信息："+serverConfig.getUrl());
-            AjaxResult ajax = AjaxResult.success();
+            Result ajax = Result.success();
             ajax.put("fileName", fileName);
             ajax.put("url", resultFileName);
             return ajax;
         }
         catch (Exception e)
         {
-            return AjaxResult.error(e.getMessage());
+            return Result.error(e.getMessage());
         }
     }
 
@@ -585,13 +585,13 @@ public class GeekPlusAppController extends BaseController {
      */
     @Log(title = "文章内容相关图片", businessType = BusinessType.DELETE)
     @GetMapping("/getImageList")
-    public AjaxResult listFileImage(String filePath)
+    public Result listFileImage(String filePath)
     {
         try{
             List<String> listImage= FileUtils.readFileImage(MaikeConfig.getFilePath(),File.separator+filePath);
-            return AjaxResult.success(listImage);
+            return Result.success(listImage);
         }catch(IOException e){
-            return AjaxResult.success(e.getMessage());
+            return Result.success(e.getMessage());
         }
     }
 
@@ -600,7 +600,7 @@ public class GeekPlusAppController extends BaseController {
      */
     @Log(title = "删除文件夹里的图片文件", businessType = BusinessType.DELETE)
     @PostMapping("/deleteFile")
-    public AjaxResult deleteFile(@RequestBody List<Map> filePaths)
+    public Result deleteFile(@RequestBody List<Map> filePaths)
     {
         int length=filePaths.size();
         for (int i = 0; i < filePaths.size(); i++) {
@@ -611,9 +611,9 @@ public class GeekPlusAppController extends BaseController {
             length-=ds;
         }
         if(length==0){
-            return AjaxResult.success("删除文件成功！");
+            return Result.success("删除文件成功！");
         }else{
-            return AjaxResult.success("删除文件失败！");
+            return Result.success("删除文件失败！");
         }
     }
 
@@ -625,7 +625,7 @@ public class GeekPlusAppController extends BaseController {
       * @Return {@link }
       */
     @GetMapping("/updateArticleViewCount")
-    public AjaxResult updateGpArticlesForUser(GpArticles gpArticles){
+    public Result updateGpArticlesForUser(GpArticles gpArticles){
         return toAjax(gpArticlesService.updateGpArticlesForUser(gpArticles));
     }
 
@@ -637,8 +637,8 @@ public class GeekPlusAppController extends BaseController {
       * @Return {@link }
       */
     @GetMapping("/getCurrentPrevArticle")
-    public AjaxResult getPrevArticleInfo(String pathName,Long articleId){
-        return AjaxResult.success(gpArticlesService.selectPrevGpArticle(pathName,articleId));
+    public Result getPrevArticleInfo(String pathName, Long articleId){
+        return Result.success(gpArticlesService.selectPrevGpArticle(pathName,articleId));
     }
 
     /**
@@ -649,8 +649,8 @@ public class GeekPlusAppController extends BaseController {
       * @Return {@link }
       */
     @GetMapping("/getCurrentNextArticle")
-    public AjaxResult getNextArticleInfo(String pathName,Long articleId){
-        return AjaxResult.success(gpArticlesService.selectNextGpArticle(pathName,articleId));
+    public Result getNextArticleInfo(String pathName, Long articleId){
+        return Result.success(gpArticlesService.selectNextGpArticle(pathName,articleId));
     }
 
     /**

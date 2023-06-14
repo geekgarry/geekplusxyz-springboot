@@ -2,7 +2,7 @@ package com.maike.webapp.function.controller;
 
 import com.maike.common.annotation.Log;
 import com.maike.common.core.controller.BaseController;
-import com.maike.common.result.AjaxResult;
+import com.maike.common.result.Result;
 import com.maike.common.core.page.PageDataInfo;
 import com.maike.common.enums.BusinessType;
 import com.maike.webapp.function.domain.GpAboutWeb;
@@ -56,9 +56,9 @@ public class GpAboutWebController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('function:web:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Integer id)
+    public Result getInfo(@PathVariable("id") Integer id)
     {
-        return AjaxResult.success(gpAboutWebService.selectGpAboutWebById(id));
+        return Result.success(gpAboutWebService.selectGpAboutWebById(id));
     }
 
     /**
@@ -67,7 +67,7 @@ public class GpAboutWebController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:web:add')")
     @Log(title = "关于网站信息，关于我的的介绍，和网站标头与尾部信息，如果有备案包括备案信息", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody GpAboutWeb gpAboutWeb)
+    public Result add(@RequestBody GpAboutWeb gpAboutWeb)
     {
         return toAjax(gpAboutWebService.insertGpAboutWeb(gpAboutWeb));
     }
@@ -78,7 +78,7 @@ public class GpAboutWebController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:web:edit')")
     @Log(title = "关于网站信息，关于我的的介绍，和网站标头与尾部信息，如果有备案包括备案信息", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody GpAboutWeb gpAboutWeb)
+    public Result edit(@RequestBody GpAboutWeb gpAboutWeb)
     {
         return toAjax(gpAboutWebService.updateGpAboutWeb(gpAboutWeb));
     }
@@ -89,7 +89,7 @@ public class GpAboutWebController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:web:remove')")
     @Log(title = "关于网站信息，关于我的的介绍，和网站标头与尾部信息，如果有备案包括备案信息", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Integer[] ids)
+    public Result remove(@PathVariable Integer[] ids)
     {
         return toAjax(gpAboutWebService.deleteGpAboutWebByIds(ids));
     }

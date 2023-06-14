@@ -2,7 +2,7 @@ package com.maike.webapp.function.controller;
 
 import com.maike.common.annotation.Log;
 import com.maike.common.core.controller.BaseController;
-import com.maike.common.result.AjaxResult;
+import com.maike.common.result.Result;
 import com.maike.common.core.page.PageDataInfo;
 import com.maike.common.enums.BusinessType;
 import com.maike.webapp.function.domain.GpArticleMapTag;
@@ -63,9 +63,9 @@ public class GpArticleTagsController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('function:tags:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    public Result getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(gpArticleTagsService.selectGpArticleTagsById(id));
+        return Result.success(gpArticleTagsService.selectGpArticleTagsById(id));
     }
 
     /**
@@ -74,7 +74,7 @@ public class GpArticleTagsController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:tags:add')")
     @Log(title = "文章标签", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody GpArticleTags gpArticleTags)
+    public Result add(@RequestBody GpArticleTags gpArticleTags)
     {
         return toAjax(gpArticleTagsService.insertGpArticleTags(gpArticleTags));
     }
@@ -85,7 +85,7 @@ public class GpArticleTagsController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:tags:edit')")
     @Log(title = "文章标签", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody GpArticleTags gpArticleTags)
+    public Result edit(@RequestBody GpArticleTags gpArticleTags)
     {
         return toAjax(gpArticleTagsService.updateGpArticleTags(gpArticleTags));
     }
@@ -96,7 +96,7 @@ public class GpArticleTagsController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:tags:remove')")
     @Log(title = "文章标签", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Long[] ids)
+    public Result remove(@PathVariable Long[] ids)
     {
         return toAjax(gpArticleTagsService.deleteGpArticleTagsByIds(ids));
     }
@@ -109,9 +109,9 @@ public class GpArticleTagsController extends BaseController
       * @Return {@link }
       */
     @GetMapping("/getTagByArticleId")
-    public AjaxResult getTagByArticleId(String articleId){
+    public Result getTagByArticleId(String articleId){
         List<GpArticleTags> list=gpArticleTagsService.selectTagByArticleId(articleId);
-        return AjaxResult.success(list);
+        return Result.success(list);
     }
 
     /**
@@ -122,7 +122,7 @@ public class GpArticleTagsController extends BaseController
       * @Return {@link }
       */
     @PostMapping("/insertGpArticleMapTag")
-    public AjaxResult insertGpArticleMapTag(@RequestBody Map<String,Object> map){
+    public Result insertGpArticleMapTag(@RequestBody Map<String,Object> map){
 //        Map<String,Long> tagMap=new HashMap();
 //        tagMap.put("articleId",Long.parseLong(map.get("articleId").toString()));
 //        tagMap.put("articleTag",Long.parseLong(map.get("articleTag").toString()));
@@ -132,7 +132,7 @@ public class GpArticleTagsController extends BaseController
         if(listMapTag.isEmpty()){
             return toAjax(gpArticleTagsService.insertGpArticleMapTag(map));
         }else{
-            return AjaxResult.error();
+            return Result.error();
         }
     }
 
@@ -144,7 +144,7 @@ public class GpArticleTagsController extends BaseController
       * @Return {@link }
       */
     @GetMapping("/deleteGpArticleMapTag")
-    public AjaxResult deleteGpArticleMapTagByIdTag(Map<String,Object> map){
+    public Result deleteGpArticleMapTagByIdTag(Map<String,Object> map){
         return toAjax(gpArticleTagsService.deleteGpArticleMapTagByIdTag(map));
     }
 }

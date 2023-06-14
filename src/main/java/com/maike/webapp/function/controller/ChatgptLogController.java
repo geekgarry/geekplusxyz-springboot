@@ -2,7 +2,7 @@ package com.maike.webapp.function.controller;
 
 import com.maike.common.annotation.Log;
 import com.maike.common.core.controller.BaseController;
-import com.maike.common.result.AjaxResult;
+import com.maike.common.result.Result;
 import com.maike.common.core.page.PageDataInfo;
 import com.maike.common.enums.BusinessType;
 import com.maike.webapp.function.domain.ChatgptLog;
@@ -60,9 +60,9 @@ public class ChatgptLogController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('function:chatgptlog:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    public Result getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(chatgptLogService.selectChatgptLogById(id));
+        return Result.success(chatgptLogService.selectChatgptLogById(id));
     }
 
     /**
@@ -72,7 +72,7 @@ public class ChatgptLogController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:chatgptlog:add')")
     @Log(title = "Chatgpt聊天记录日志", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody ChatgptLog chatgptLog)
+    public Result add(@RequestBody ChatgptLog chatgptLog)
     {
         return toAjax(chatgptLogService.insertChatgptLog(chatgptLog));
     }
@@ -84,7 +84,7 @@ public class ChatgptLogController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:chatgptlog:edit')")
     @Log(title = "Chatgpt聊天记录日志", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody ChatgptLog chatgptLog)
+    public Result edit(@RequestBody ChatgptLog chatgptLog)
     {
         return toAjax(chatgptLogService.updateChatgptLog(chatgptLog));
     }
@@ -96,7 +96,7 @@ public class ChatgptLogController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:chatgptlog:remove')")
     @Log(title = "Chatgpt聊天记录日志", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Long[] ids)
+    public Result remove(@PathVariable Long[] ids)
     {
         return toAjax(chatgptLogService.deleteChatgptLogByIds(ids));
     }

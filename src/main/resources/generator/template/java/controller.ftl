@@ -1,8 +1,8 @@
-package ${basePackage}.project.web;
-import ${basePackage}.core.result.Result;
+package ${basePackage}.webapp.function.controller;
+import ${basePackage}.core.result.AjaxResult;
 import ${basePackage}.core.result.ResultGenerator;
-import ${basePackage}.project.model.${modelNameUpperCamel};
-import ${basePackage}.project.service.${modelNameUpperCamel}Service;
+import ${basePackage}.webapp.function.domain.${modelNameUpperCamel};
+import ${basePackage}.webapp.function.service.${modelNameUpperCamel}Service;
 import com.maike.common.core.page.PageDataInfo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -79,7 +79,7 @@ public class ${modelNameUpperCamel}Controller {
     */
     @GetMapping("/listAll")
     public PageDataInfo list(${modelNameUpperCamel} ${modelNameLowerCamel}) {
-        PageHelper.startPage(page, size);
+        //PageHelper.startPage(page, size);
         List<${modelNameUpperCamel}> list = ${modelNameLowerCamel}Service.select${modelNameUpperCamel}List(${modelNameLowerCamel});
         //PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.getPageData(list);

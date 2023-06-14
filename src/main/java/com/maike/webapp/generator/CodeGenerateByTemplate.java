@@ -21,10 +21,10 @@ import java.util.*;
  **/
 public class CodeGenerateByTemplate {
     private static final String PROJECT_PATH = System.getProperty("user.dir");//项目在硬盘上的基础路径
-    private static final String TEMPLATE_FILE_JAVA_PATH = PROJECT_PATH + "/src/test/resources/generator/template/java/";//模板位置
-    private static final String TEMPLATE_FILE_XML_PATH = PROJECT_PATH + "/src/test/resources/generator/template/xml/";//模板位置
-    private static final String TEMPLATE_FILE_VUE_PATH = PROJECT_PATH + "/src/test/resources/generator/template/vue/";//模板位置
-    private static final String TEMPLATE_FILE_JS_PATH = PROJECT_PATH + "/src/test/resources/generator/template/js/";//模板位置
+    private static final String TEMPLATE_FILE_JAVA_PATH = PROJECT_PATH + "/src/main/resources/generator/template/java/";//模板位置
+    private static final String TEMPLATE_FILE_XML_PATH = PROJECT_PATH + "/src/main/resources/generator/template/xml/";//模板位置
+    private static final String TEMPLATE_FILE_VUE_PATH = PROJECT_PATH + "/src/main/resources/generator/template/vue/";//模板位置
+    private static final String TEMPLATE_FILE_JS_PATH = PROJECT_PATH + "/src/main/resources/generator/template/js/";//模板位置
     private static final String JAVA_PATH = "/src/main/java"; //java文件路径
     private static final String RESOURCES_PATH = "/src/main/resources";//资源文件路径
 
@@ -277,7 +277,7 @@ public class CodeGenerateByTemplate {
         map.put("allColumn",table.getAllColumns());
         map.put("allColumnCount",table.getAllColumns().size());
         //1.mapperXml
-        String mapperXMLPath=PROJECT_PATH+RESOURCES_PATH+ "/mybatis/function";
+        String mapperXMLPath=PROJECT_PATH+RESOURCES_PATH+ "/mybatis/function/geekplus";
         createDir(mapperXMLPath);
         // 1.mapperXml
         String mapperXMLName = mapperXMLPath + File.separatorChar + javaClassName + "Mapper.xml";

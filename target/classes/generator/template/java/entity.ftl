@@ -1,4 +1,4 @@
-package ${basePackage}.project.model;
+package ${basePackage}.webapp.function.domain;
 
 import com.maike.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;

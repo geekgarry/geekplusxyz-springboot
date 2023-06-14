@@ -2,7 +2,7 @@ package com.maike.webapp.function.controller;
 
 import com.maike.common.annotation.Log;
 import com.maike.common.core.controller.BaseController;
-import com.maike.common.result.AjaxResult;
+import com.maike.common.result.Result;
 import com.maike.common.core.page.PageDataInfo;
 import com.maike.common.enums.BusinessType;
 import com.maike.webapp.function.domain.ProjectExperience;
@@ -56,9 +56,9 @@ public class ProjectExperienceController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('function:experience:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    public Result getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(projectExperienceService.selectProjectExperienceById(id));
+        return Result.success(projectExperienceService.selectProjectExperienceById(id));
     }
 
     /**
@@ -67,7 +67,7 @@ public class ProjectExperienceController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:experience:add')")
     @Log(title = "【请填写功能名称】", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody ProjectExperience projectExperience)
+    public Result add(@RequestBody ProjectExperience projectExperience)
     {
         return toAjax(projectExperienceService.insertProjectExperience(projectExperience));
     }
@@ -78,7 +78,7 @@ public class ProjectExperienceController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:experience:edit')")
     @Log(title = "【请填写功能名称】", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody ProjectExperience projectExperience)
+    public Result edit(@RequestBody ProjectExperience projectExperience)
     {
         return toAjax(projectExperienceService.updateProjectExperience(projectExperience));
     }
@@ -89,7 +89,7 @@ public class ProjectExperienceController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:experience:remove')")
     @Log(title = "【请填写功能名称】", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Long[] ids)
+    public Result remove(@PathVariable Long[] ids)
     {
         return toAjax(projectExperienceService.deleteProjectExperienceByIds(ids));
     }

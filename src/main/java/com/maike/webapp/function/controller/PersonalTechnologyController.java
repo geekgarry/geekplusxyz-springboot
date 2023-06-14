@@ -2,7 +2,7 @@ package com.maike.webapp.function.controller;
 
 import com.maike.common.annotation.Log;
 import com.maike.common.core.controller.BaseController;
-import com.maike.common.result.AjaxResult;
+import com.maike.common.result.Result;
 import com.maike.common.core.page.PageDataInfo;
 import com.maike.common.enums.BusinessType;
 import com.maike.webapp.function.domain.PersonalTechnology;
@@ -56,9 +56,9 @@ public class PersonalTechnologyController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('function:technology:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    public Result getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(personalTechnologyService.selectPersonalTechnologyById(id));
+        return Result.success(personalTechnologyService.selectPersonalTechnologyById(id));
     }
 
     /**
@@ -67,7 +67,7 @@ public class PersonalTechnologyController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:technology:add')")
     @Log(title = "【请填写功能名称】", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody PersonalTechnology personalTechnology)
+    public Result add(@RequestBody PersonalTechnology personalTechnology)
     {
         return toAjax(personalTechnologyService.insertPersonalTechnology(personalTechnology));
     }
@@ -78,7 +78,7 @@ public class PersonalTechnologyController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:technology:edit')")
     @Log(title = "【请填写功能名称】", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody PersonalTechnology personalTechnology)
+    public Result edit(@RequestBody PersonalTechnology personalTechnology)
     {
         return toAjax(personalTechnologyService.updatePersonalTechnology(personalTechnology));
     }
@@ -89,7 +89,7 @@ public class PersonalTechnologyController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:technology:remove')")
     @Log(title = "【请填写功能名称】", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Long[] ids)
+    public Result remove(@PathVariable Long[] ids)
     {
         return toAjax(personalTechnologyService.deletePersonalTechnologyByIds(ids));
     }

@@ -2,7 +2,7 @@ package com.maike.webapp.function.controller;
 
 import com.maike.common.annotation.Log;
 import com.maike.common.core.controller.BaseController;
-import com.maike.common.result.AjaxResult;
+import com.maike.common.result.Result;
 import com.maike.common.core.page.PageDataInfo;
 import com.maike.common.enums.BusinessType;
 import com.maike.webapp.function.domain.GpNotice;
@@ -56,9 +56,9 @@ public class GpNoticeController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('function:notice:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    public Result getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(gpNoticeService.selectGpNoticeById(id));
+        return Result.success(gpNoticeService.selectGpNoticeById(id));
     }
 
     /**
@@ -67,7 +67,7 @@ public class GpNoticeController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:notice:add')")
     @Log(title = "网站通知", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody GpNotice gpNotice)
+    public Result add(@RequestBody GpNotice gpNotice)
     {
         return toAjax(gpNoticeService.insertGpNotice(gpNotice));
     }
@@ -78,7 +78,7 @@ public class GpNoticeController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:notice:edit')")
     @Log(title = "网站通知", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody GpNotice gpNotice)
+    public Result edit(@RequestBody GpNotice gpNotice)
     {
         return toAjax(gpNoticeService.updateGpNotice(gpNotice));
     }
@@ -89,7 +89,7 @@ public class GpNoticeController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:notice:remove')")
     @Log(title = "网站通知", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Long[] ids)
+    public Result remove(@PathVariable Long[] ids)
     {
         return toAjax(gpNoticeService.deleteGpNoticeByIds(ids));
     }

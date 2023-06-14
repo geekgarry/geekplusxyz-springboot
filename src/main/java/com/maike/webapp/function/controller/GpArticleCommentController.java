@@ -2,7 +2,7 @@ package com.maike.webapp.function.controller;
 
 import com.maike.common.annotation.Log;
 import com.maike.common.core.controller.BaseController;
-import com.maike.common.result.AjaxResult;
+import com.maike.common.result.Result;
 import com.maike.common.core.page.PageDataInfo;
 import com.maike.common.enums.BusinessType;
 import com.maike.webapp.function.domain.GpUserComment;
@@ -44,10 +44,10 @@ public class GpArticleCommentController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('function:comment:list')")
     @GetMapping("/userComment")
-    public AjaxResult articleComment(GpUserComment gpUserComment)
+    public Result articleComment(GpUserComment gpUserComment)
     {
         List<GpUserComment> list = gpArticleCommentService.selectGpArticleCommentList(gpUserComment);
-        return AjaxResult.success(list);
+        return Result.success(list);
     }
 
     /**
@@ -68,9 +68,9 @@ public class GpArticleCommentController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('function:comment:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    public Result getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(gpArticleCommentService.selectGpArticleCommentById(id));
+        return Result.success(gpArticleCommentService.selectGpArticleCommentById(id));
     }
 
     /**
@@ -79,7 +79,7 @@ public class GpArticleCommentController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:comment:add')")
     @Log(title = "用户评论回复留言", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody GpUserComment gpUserComment)
+    public Result add(@RequestBody GpUserComment gpUserComment)
     {
         return toAjax(gpArticleCommentService.insertGpArticleComment(gpUserComment));
     }
@@ -90,7 +90,7 @@ public class GpArticleCommentController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:comment:edit')")
     @Log(title = "用户评论回复留言", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody GpUserComment gpUserComment)
+    public Result edit(@RequestBody GpUserComment gpUserComment)
     {
         return toAjax(gpArticleCommentService.updateGpArticleComment(gpUserComment));
     }
@@ -101,7 +101,7 @@ public class GpArticleCommentController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:comment:remove')")
     @Log(title = "用户评论回复留言", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Long[] ids)
+    public Result remove(@PathVariable Long[] ids)
     {
         return toAjax(gpArticleCommentService.deleteGpArticleCommentByIds(ids));
     }

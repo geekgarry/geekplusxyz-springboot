@@ -43,7 +43,7 @@ spring:
       username: root
       password: 123456cpp
       #url: jdbc:mysql://localhost:3306/geekplusadmin?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull
-      url: jdbc:mysql://43.133.254.75:3306/maike?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull
+      url: jdbc:mysql://43.133.254.75:3306/geekplusxyz?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull
       initialSize: 5
       minIdle: 5
       maxActive: 20
@@ -82,8 +82,11 @@ spring:
             multi-statement-allow: true
   devtools:
     restart:
-      enabled: on  #设置开启热部署
+      enabled: true  #设置开启热部署
       additional-paths: src/main/java #重启目录
+      ###解决项目自动重新编译后接口报404的问题
+      poll-interval: 3000
+      quiet-period: 1000
   freemarker:
     cache: false
     check-template-location: false
@@ -120,7 +123,7 @@ spring:
 mybatis:
   #config-location: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath*:mapper/*.xml
-  type-aliases-package: com.geekplus.web.pojo
+  type-aliases-package: com.maike.webapp.function.domain
   configuration:
     cache-enabled: on
     use-generated-keys: on

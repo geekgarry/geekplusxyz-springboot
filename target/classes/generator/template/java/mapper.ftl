@@ -1,5 +1,5 @@
-package ${basePackage}.project.dao;
-import ${basePackage}.project.model.${modelNameUpperCamel};
+package ${basePackage}.webapp.function.mapper;
+import ${basePackage}.webapp.function.domain.${modelNameUpperCamel};
 import java.util.List;
 
 /**

@@ -2,7 +2,7 @@ package com.maike.webapp.function.controller;
 
 import com.maike.common.annotation.Log;
 import com.maike.common.core.controller.BaseController;
-import com.maike.common.result.AjaxResult;
+import com.maike.common.result.Result;
 import com.maike.common.core.page.PageDataInfo;
 import com.maike.common.enums.BusinessType;
 import com.maike.webapp.function.domain.GpArticleMapTag;
@@ -56,9 +56,9 @@ public class GpArticleMapTagController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('function:tag:query')")
     @GetMapping(value = "/{aticleId}")
-    public AjaxResult getInfo(@PathVariable("aticleId") Long aticleId)
+    public Result getInfo(@PathVariable("aticleId") Long aticleId)
     {
-        return AjaxResult.success(gpArticleMapTagService.selectGpArticleMapTagById(aticleId));
+        return Result.success(gpArticleMapTagService.selectGpArticleMapTagById(aticleId));
     }
 
     /**
@@ -67,7 +67,7 @@ public class GpArticleMapTagController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:tag:add')")
     @Log(title = "文章标签映射", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody GpArticleMapTag gpArticleMapTag)
+    public Result add(@RequestBody GpArticleMapTag gpArticleMapTag)
     {
         return toAjax(gpArticleMapTagService.insertGpArticleMapTag(gpArticleMapTag));
     }
@@ -78,7 +78,7 @@ public class GpArticleMapTagController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:tag:edit')")
     @Log(title = "文章标签映射", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody GpArticleMapTag gpArticleMapTag)
+    public Result edit(@RequestBody GpArticleMapTag gpArticleMapTag)
     {
         return toAjax(gpArticleMapTagService.updateGpArticleMapTag(gpArticleMapTag));
     }
@@ -89,7 +89,7 @@ public class GpArticleMapTagController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:tag:remove')")
     @Log(title = "文章标签映射", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{aticleIds}")
-    public AjaxResult remove(@PathVariable Long[] aticleIds)
+    public Result remove(@PathVariable Long[] aticleIds)
     {
         return toAjax(gpArticleMapTagService.deleteGpArticleMapTagByIds(aticleIds));
     }

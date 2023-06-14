@@ -2,7 +2,7 @@ package com.maike.webapp.function.controller;
 
 import com.maike.common.annotation.Log;
 import com.maike.common.core.controller.BaseController;
-import com.maike.common.result.AjaxResult;
+import com.maike.common.result.Result;
 import com.maike.common.enums.BusinessType;
 import com.maike.webapp.function.domain.GpArticleCategory;
 import com.maike.webapp.function.service.IGpArticleCategoryService;
@@ -30,11 +30,11 @@ public class GpArticleCategoryController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('function:category:list')")
     @GetMapping("/list")
-    public AjaxResult list(GpArticleCategory gpArticleCategory)
+    public Result list(GpArticleCategory gpArticleCategory)
     {
         //startPage();
         List<GpArticleCategory> list = gpArticleCategoryService.selectGpArticleCategoryList(gpArticleCategory);
-        return AjaxResult.success(list);
+        return Result.success(list);
     }
 
     /**
@@ -55,9 +55,9 @@ public class GpArticleCategoryController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('function:category:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Integer id)
+    public Result getInfo(@PathVariable("id") Integer id)
     {
-        return AjaxResult.success(gpArticleCategoryService.selectGpArticleCategoryById(id));
+        return Result.success(gpArticleCategoryService.selectGpArticleCategoryById(id));
     }
 
     /**
@@ -66,7 +66,7 @@ public class GpArticleCategoryController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:category:add')")
     @Log(title = "文章类型目录", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody GpArticleCategory gpArticleCategory)
+    public Result add(@RequestBody GpArticleCategory gpArticleCategory)
     {
         return toAjax(gpArticleCategoryService.insertGpArticleCategory(gpArticleCategory));
     }
@@ -77,7 +77,7 @@ public class GpArticleCategoryController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:category:edit')")
     @Log(title = "文章类型目录", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody GpArticleCategory gpArticleCategory)
+    public Result edit(@RequestBody GpArticleCategory gpArticleCategory)
     {
         return toAjax(gpArticleCategoryService.updateGpArticleCategory(gpArticleCategory));
     }
@@ -88,7 +88,7 @@ public class GpArticleCategoryController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:category:remove')")
     @Log(title = "文章类型目录", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Integer[] ids)
+    public Result remove(@PathVariable Integer[] ids)
     {
         return toAjax(gpArticleCategoryService.deleteGpArticleCategoryByIds(ids));
     }
@@ -99,9 +99,9 @@ public class GpArticleCategoryController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:category:list')")
     //@Log(title = "文章类型目录", businessType = BusinessType.DELETE)
     @GetMapping("/listParentCategory")
-    public AjaxResult listParentCategory()
+    public Result listParentCategory()
     {
-        return AjaxResult.success(gpArticleCategoryService.selectParentCategory());
+        return Result.success(gpArticleCategoryService.selectParentCategory());
     }
 
     /**
@@ -110,9 +110,9 @@ public class GpArticleCategoryController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:category:list')")
     //@Log(title = "文章类型目录", businessType = BusinessType.DELETE)
     @GetMapping("/listSubParentCategory")
-    public AjaxResult listSubParentCategory()
+    public Result listSubParentCategory()
     {
-        return AjaxResult.success(gpArticleCategoryService.selectSubParentCategory());
+        return Result.success(gpArticleCategoryService.selectSubParentCategory());
     }
 
     /**
@@ -120,10 +120,10 @@ public class GpArticleCategoryController extends BaseController
      */
     //@Log(title = "文章类型目录", businessType = BusinessType.DELETE)
     @GetMapping("/listSubCategory")
-    public AjaxResult listSubCategory()
+    public Result listSubCategory()
     {
         GpArticleCategory gpArticleCategory=new GpArticleCategory();
         gpArticleCategory.setMenuType("1");
-        return AjaxResult.success(gpArticleCategoryService.selectArticleCategoryList(gpArticleCategory));
+        return Result.success(gpArticleCategoryService.selectArticleCategoryList(gpArticleCategory));
     }
 }

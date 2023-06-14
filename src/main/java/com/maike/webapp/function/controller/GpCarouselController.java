@@ -4,7 +4,7 @@ import com.maike.common.annotation.Log;
 import com.maike.common.config.MaikeConfig;
 import com.maike.common.constant.Constants;
 import com.maike.common.core.controller.BaseController;
-import com.maike.common.result.AjaxResult;
+import com.maike.common.result.Result;
 import com.maike.common.core.page.PageDataInfo;
 import com.maike.common.enums.BusinessType;
 import com.maike.common.utils.time.DateUtils;
@@ -73,9 +73,9 @@ public class GpCarouselController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('function:carousel:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Integer id)
+    public Result getInfo(@PathVariable("id") Integer id)
     {
-        return AjaxResult.success(gpCarouselService.selectGpCarouselById(id));
+        return Result.success(gpCarouselService.selectGpCarouselById(id));
     }
 
     /**
@@ -84,7 +84,7 @@ public class GpCarouselController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:carousel:add')")
     @Log(title = "首页跑马灯轮播图", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody GpCarousel gpCarousel)
+    public Result add(@RequestBody GpCarousel gpCarousel)
     {
         return toAjax(gpCarouselService.insertGpCarousel(gpCarousel));
     }
@@ -95,7 +95,7 @@ public class GpCarouselController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:carousel:edit')")
     @Log(title = "首页跑马灯轮播图", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody GpCarousel gpCarousel)
+    public Result edit(@RequestBody GpCarousel gpCarousel)
     {
         return toAjax(gpCarouselService.updateGpCarousel(gpCarousel));
     }
@@ -106,7 +106,7 @@ public class GpCarouselController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:carousel:remove')")
     @Log(title = "首页跑马灯轮播图", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Integer[] ids)
+    public Result remove(@PathVariable Integer[] ids)
     {
         return toAjax(gpCarouselService.deleteGpCarouselByIds(ids));
     }
@@ -115,7 +115,7 @@ public class GpCarouselController extends BaseController
      * 通用上传请求
      */
     @PostMapping("/uploadCarousel")
-    public AjaxResult uploadFile( MultipartFile file) throws Exception
+    public Result uploadFile(MultipartFile file) throws Exception
     {
         try
         {
@@ -135,14 +135,14 @@ public class GpCarouselController extends BaseController
             String resultFileName= Constants.RESOURCE_PREFIX+"/carousel/"+fileName;
             String url = serverConfig.getUrl() + resultFileName;
             log.info("用户请求URL信息："+serverConfig.getUrl());
-            AjaxResult ajax = AjaxResult.success();
+            Result ajax = Result.success();
             ajax.put("fileName", fileName);
             ajax.put("url", url);
             return ajax;
         }
         catch (Exception e)
         {
-            return AjaxResult.error(e.getMessage());
+            return Result.error(e.getMessage());
         }
     }
 
@@ -152,13 +152,13 @@ public class GpCarouselController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:carousel:list')")
     @Log(title = "首页跑马灯轮播图", businessType = BusinessType.DELETE)
     @GetMapping("/getImageList")
-    public AjaxResult listFileImage()
+    public Result listFileImage()
     {
         try{
             List<String> listImage= FileUtils.readFileImage(MaikeConfig.getFilePath(),File.separator +"carousel");
-            return AjaxResult.success(listImage);
+            return Result.success(listImage);
         }catch(IOException e){
-            return AjaxResult.success(e.getMessage());
+            return Result.success(e.getMessage());
         }
     }
 
@@ -168,15 +168,15 @@ public class GpCarouselController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:carousel:remove')")
     @Log(title = "删除文件夹里的图片文件", businessType = BusinessType.DELETE)
     @GetMapping("/deleteFile")
-    public AjaxResult deleteFile(String filePath)
+    public Result deleteFile(String filePath)
     {
         String profile=Constants.RESOURCE_PREFIX;//profile
         String allFilePath=MaikeConfig.getFilePath()+filePath.replace(profile,"");
         boolean flag=FileUtils.deleteFile(allFilePath);
         if(flag==true){
-            return AjaxResult.success("删除文件成功！");
+            return Result.success("删除文件成功！");
         }else{
-            return AjaxResult.success("删除文件失败！");
+            return Result.success("删除文件失败！");
         }
     }
 

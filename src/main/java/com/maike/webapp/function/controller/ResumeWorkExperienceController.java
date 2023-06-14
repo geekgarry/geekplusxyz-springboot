@@ -2,7 +2,7 @@ package com.maike.webapp.function.controller;
 
 import com.maike.common.annotation.Log;
 import com.maike.common.core.controller.BaseController;
-import com.maike.common.result.AjaxResult;
+import com.maike.common.result.Result;
 import com.maike.common.core.page.PageDataInfo;
 import com.maike.common.enums.BusinessType;
 import com.maike.webapp.function.domain.ResumeWorkExperience;
@@ -56,9 +56,9 @@ public class ResumeWorkExperienceController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('function:experience:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    public Result getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(resumeWorkExperienceService.selectResumeWorkExperienceById(id));
+        return Result.success(resumeWorkExperienceService.selectResumeWorkExperienceById(id));
     }
 
     /**
@@ -67,7 +67,7 @@ public class ResumeWorkExperienceController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:experience:add')")
     @Log(title = "【请填写功能名称】", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody ResumeWorkExperience resumeWorkExperience)
+    public Result add(@RequestBody ResumeWorkExperience resumeWorkExperience)
     {
         return toAjax(resumeWorkExperienceService.insertResumeWorkExperience(resumeWorkExperience));
     }
@@ -78,7 +78,7 @@ public class ResumeWorkExperienceController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:experience:edit')")
     @Log(title = "【请填写功能名称】", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody ResumeWorkExperience resumeWorkExperience)
+    public Result edit(@RequestBody ResumeWorkExperience resumeWorkExperience)
     {
         return toAjax(resumeWorkExperienceService.updateResumeWorkExperience(resumeWorkExperience));
     }
@@ -89,7 +89,7 @@ public class ResumeWorkExperienceController extends BaseController
     @PreAuthorize("@ss.hasPermi('function:experience:remove')")
     @Log(title = "【请填写功能名称】", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Long[] ids)
+    public Result remove(@PathVariable Long[] ids)
     {
         return toAjax(resumeWorkExperienceService.deleteResumeWorkExperienceByIds(ids));
     }

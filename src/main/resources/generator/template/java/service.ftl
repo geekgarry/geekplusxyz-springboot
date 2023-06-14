@@ -1,5 +1,5 @@
-package ${basePackage}.project.service;
-import ${basePackage}.project.model.${modelNameUpperCamel};
+package ${basePackage}.webapp.function.service;
+import ${basePackage}.webapp.function.domain.${modelNameUpperCamel};
 //import ${basePackage}.core.Service;
 import java.util.List;
 

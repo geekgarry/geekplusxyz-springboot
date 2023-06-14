@@ -13,7 +13,7 @@ import com.maike.common.core.page.PageDomain;
 import com.maike.common.core.page.TableSupport;
 import com.maike.common.core.text.StrFormatter;
 import com.maike.common.core.page.PageDataInfo;
-import com.maike.common.result.AjaxResult;
+import com.maike.common.result.Result;
 import com.maike.common.utils.time.DateUtils;
 import com.maike.common.utils.StringUtils;
 import org.slf4j.Logger;
@@ -349,9 +349,9 @@ public class BaseController {
      * @param rows 影响行数
      * @return 操作结果
      */
-    protected AjaxResult toAjax(int rows)
+    protected Result toAjax(int rows)
     {
-        return rows > 0 ? AjaxResult.success() : AjaxResult.error();
+        return rows > 0 ? Result.success() : Result.error();
     }
 
     /**

@@ -1,122 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<html xmlns:th="http://www.thymeleaf.org">
-
 <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <meta name="format-detection" content="email=no" />
+    <meta name="wap-font-scale"  content="no" />
+    <meta name="viewport" content="user-scalable=no, width=device-width" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="UTF-8">
-    <meta name="renderer" content="webkit|ie-comp|ie-stand">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
-    <meta http-equiv="Cache-Control" content="no-siteapp">
-    <title>首页-极客普拉斯</title>
-    <link rel="stylesheet" type="text/css" href="h-ui/css/H-ui.min.css">
-    <!--[if lt IE 9]>
-    <script type="text/javascript" src="lib/html5shi.js"></script>
-    <script type="text/javascript" src="lib/respond.min.js"></script>
-    <script type="text/javascript" src="lib/PIE_IE678.js"></script>
-    <![endif]-->
-    <!--[if IE 6]>
-    <script type="text/javascript" src="Lib/DD_belatedPNG_0.0.8a-min.js"></script>
-    <script>
-        DD_belatedPNG.fix('.pngfix,.icon');
-    </script>
-    <![endif]-->
+    <title>极客普拉斯</title>
+    <link href="axui/css/ax.css" rel="stylesheet" type="text/css" >
+    <link href="axui/css/ax-response.css" rel="stylesheet" type="text/css" >
 </head>
+<body>
+code
+<header class="ax-header">
+    <div class="ax-row">
+        <a href="###" class="ax-open ax-iconfont ax-icon-menu"></a><a href="###" class="ax-open ax-iconfont ax-icon-cart"></a><span class="ax-open"></span>
+        <div class="ax-col"><a href="###" class="ax-logo"><img src="https://src.axui.cn/v2.0/public/images/ax-logo.png" /></a></div>
+        <div class="ax-nav">
 
-<body ontouchstart>
-<div class="hui-side-box">
-    <ul class="hui-nav pt-20">
-        <li><a href="#">登录/注册</a>
-        </li>
-        <li><a href="#">技术检索</a>
-        </li>
-        <li><a href="#">关于我们</a>
-        </li>
-        <li><a href="#">联系我们</a>
-        </li>
-        <li><a href="#">隐私保护</a>
-        </li>
-        <li><a href="#">免责声明</a>
-        </li>
-        <li><a href="#">支付方式</a>
-        </li>
-    </ul>
-</div>
-<div class="hui-container-wrapper">
-    <div class="hui-container-bg"></div>
-    <header class="hui-nav-wrapper">
-        <div class="hui-nav-bar hui-nav-black hui-nav-fixed-top">
-            <div class="hui-layout-content clearfix"> <a class="hui-logo hidden-xs" href="http://www.h-ui.net/aboutHui.shtml">H-ui前端框架</a>
-                <a class="hui-logo visible-xs" href="http://www.h-ui.net/aboutHui.shtml">H-ui</a>
-                <span class="hui-logo hui-slogan hidden-xs">简单 · 免费 · 适合中国网站</span>
-                <a aria-hidden="false"
-                   class="hui-nav-toggle hui-iconfont visible-xs JS-nav-toggle" href="javascript:;"></a>
+            <div class="ax-item"><a href="###" class="ax-text">首页</a><span class="ax-line"></span></div>
+            <div class="ax-item ax-selected"><a href="###" class="ax-text">新闻动态</a><span class="ax-line"></span></div>
 
-                <nav class="hui-nav hui-nav-collapse" style="float: left; display: flex; flex: 1 1 0%;">
-                    <ul class="clearfix">
-                        <li class="current"><a href="http://www.h-ui.net/" target="_blank">首页</a>
-                        </li>
-                        <li><a href="http://www.h-ui.net/Hui-overview.shtml" target="_blank">核心</a>
-                        </li>
-                        <li><a href="http://www.h-ui.net/lib/jQuery.cookie.js.shtml" target="_blank">脚本</a>
-                        </li>
-                        <li class="hui-dropdown hui-dropdown-hover"><a href="javascript:;" class="hui-dropdown-link">工具 <i class="hui-iconfont"></i></a>
-                            <ul class="hui-menu hui-dropdown-menu radius box-shadow">
-                                <li class="hui-menu-item"><a href="http://www.h-ui.net/bug.shtml" target="_blank">Bug兼容性汇总</a>
-                                </li>
-                                <li class="hui-menu-item"><a href="http://www.h-ui.net/websafecolors.shtml" target="_blank">web安全色</a>
-                                </li>
-                                <li class="hui-menu-item"><a href="http://www.h-ui.net/hui-3.7-hui-iconfont.shtml" target="_blank">hui-iconfont</a>
-                                </li>
-                                <li class="hui-menu-item"><a href="javascript:;">web工具箱<i class="arrow hui-iconfont"></i></a>
-                                    <ul class="hui-menu">
-                                        <li class="hui-menu-item"><a href="http://www.h-ui.net/tools/jsformat.shtml" target="_blank">JS/HTML格式化工具</a>
-                                        </li>
-                                        <li class="hui-menu-item"><a href="http://www.h-ui.net/tools/HTMLtoJS.shtml" target="_blank">HTML/JS转换工具</a>
-                                        </li>
-                                        <li class="hui-menu-item"><a href="http://www.h-ui.net/tools/cssformat.shtml" target="_blank">CSS代码格式化工具</a>
-                                        </li>
-                                        <li class="hui-menu-item"><a href="http://www.h-ui.net/tools/daxiaoxie.shtml" target="_blank">字母大小写转换工具</a>
-                                        </li>
-                                        <li class="hui-menu-item"><a href="http://www.h-ui.net/tools/fantizhuanhuan.shtml" target="_blank">繁体字、火星文转换</a>
-                                        </li>
-                                        <li class="hui-menu-item"><a href="javascript:;">三级菜单<i class="arrow hui-iconfont"></i></a>
-                                            <ul class="hui-menu">
-                                                <li class="hui-menu-item"><a href="javascript:;">四级菜单</a>
-                                                </li>
-                                                <li class="hui-menu-item"><a href="javascript:;">四级菜单</a>
-                                                </li>
-                                                <li class="hui-menu-item"><a href="javascript:;">四级菜单</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li class="hui-menu-item"><a href="#">三级导航</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="hui-menu-item"><a href="#">二级导航</a>
-                                </li>
-                                <li class="hui-menu-item disabled"><a href="javascript:;">二级菜单</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><a href="http://h-ui.net/aboutHui.shtml" target="_blank">联系我们</a>
-                        </li>
-                    </ul>
-                </nav>
-                <nav class="hui-nav hidden-xs" style="float: right">
-                    <ul class="clearfix">
-                        <li><a href="#" target="_blank">登录</a>
-                        </li>
-                        <li><a href="#" target="_blank">注册</a>
-                        </li>
-                    </ul>
-                </nav>
+            <div class="ax-search">
+                <form name="search">
+                    <input name="show" value="title" type="hidden">
+                    <input name="keyboard" placeholder="关键字..." type="text"><a href="###" class="ax-iconfont ax-icon-search"></a>
+                </form>
             </div>
-        </div>
-    </header>
-    <p th:text="${message}"></p>
-</div>
-</body>
 
+            <div class="ax-login"><a href="###">登录</a><a href="###">注册</a></div>
+
+            <span class="ax-btns"><a href="###" class="ax-iconfont ax-icon-question-o-f"><span class="ax-dot"></span></a><a href="###" class="ax-iconfont ax-icon-bell-f"><span class="ax-badge">8</span></a></span>
+
+        </div>
+        <a href="###" class="ax-open ax-iconfont ax-icon-bell-f"><span class="ax-badge">2</span></a><a href="###" class="ax-open ax-iconfont ax-icon-person"><span class="ax-dot"></span></a><a href="###" class="ax-open ax-iconfont ax-icon-search"></a>
+    </div>
+</header>
+<div class="ax-space-header"></div>
+页面内容,哈哈哈
+<script src="axui/js/ax.js" type="text/javascript" charset="utf-8"></script>
+<script type='text/javascript'>
+    document.addEventListener("DOMContentLoaded", function () {
+        //js内容
+    });
+</script>
+</body>
 </html>
